@@ -21,11 +21,12 @@
     [super viewDidLoad];
     
     //    vPhotoGallery.frame = self.view.frame;
-    vPhotoGallery.galleryMode = UIPhotoGalleryModeImageRemote;
+    vPhotoGallery.galleryMode = UIPhotoGalleryModeImageLocal;
     vPhotoGallery.initialIndex = 4;
     vPhotoGallery.subviewGap = 40;
     
     sampleURLs = @[
+                   @"http://l.yimg.com/g/images/bg_error_hold_your_clicks.jpg",
                    @"http://farm9.staticflickr.com/8418/8782168922_c69e58dcd5_z.jpg",
                    @"http://farm8.staticflickr.com/7407/8717876655_13bcca7b16_z.jpg",
                    @"http://farm9.staticflickr.com/8127/8708655358_817632ca88_z.jpg",
@@ -42,6 +43,10 @@
 #pragma UIPhotoGalleryDataSource methods
 - (NSInteger)numberOfViewsInPhotoGallery:(UIPhotoGalleryView *)photoGallery {
     return 10;
+}
+
+- (UIImage*)photoGallery:(UIPhotoGalleryView*)photoGallery localImageAtIndex:(NSInteger)index {
+    return [UIImage imageNamed:[NSString stringWithFormat:@"sample%d.jpg", index]];
 }
 
 - (NSURL*)photoGallery:(UIPhotoGalleryView *)photoGallery remoteImageURLAtIndex:(NSInteger)index {

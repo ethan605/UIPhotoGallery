@@ -9,7 +9,11 @@
 #import "UIPhotoItemView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
+#define kMaxZoomingScale            2
+
 @interface UIRemotePhotoItem : UIImageView
+
+@property (nonatomic, strong) UIPhotoItemView *photoItemView;
 
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl;
 
@@ -32,9 +36,16 @@
         
         [self addSubview:activityIndicator];
         
-        [self setImageWithURL:remoteUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-            if (!error)
+        UIRemotePhotoItem *selfDelegate = self;
+        
+        [selfDelegate setImageWithURL:remoteUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+            if (!error && image) {
                 [activityIndicator removeFromSuperview];
+                
+                CGFloat widthScale = image.size.width / _photoItemView.frame.size.width;
+                CGFloat heightScale = image.size.height / _photoItemView.frame.size.height;
+                _photoItemView.maximumZoomScale = MIN(widthScale, heightScale) * kMaxZoomingScale;
+            }
         }];
     }
     
@@ -46,6 +57,7 @@
 @interface UIPhotoItemView ()
 
 - (void)tapGestureRecognizer:(UITapGestureRecognizer*)tapGesture;
+- (void)zoomFromLocation:(CGPoint)zoomLocation;
 
 @end
 
@@ -57,6 +69,7 @@
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
         self.delegate = self;
+        self.minimumZoomScale = 1;
         
         UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc]
                                                     initWithTarget:self
@@ -87,20 +100,21 @@
         [imageView setImage:localImage];
         
         mainImageView = imageView;
+        [self addSubview:imageView];
         
-        self.minimumZoomScale = 1;
-        self.maximumZoomScale = 2;
+        CGFloat widthScale = localImage.size.width / self.frame.size.width;
+        CGFloat heightScale = localImage.size.height / self.frame.size.height;
+        self.maximumZoomScale = MIN(widthScale, heightScale) * kMaxZoomingScale;
     }
     return self;
 }
 
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl atFrame:(CGRect)imageFrame {
     if (self = [self initWithFrame:frame]) {
-        mainImageView = [[UIRemotePhotoItem alloc] initWithFrame:imageFrame andRemoteURL:remoteUrl];
-        [self addSubview:mainImageView];
-        
-        self.minimumZoomScale = 1;
-        self.maximumZoomScale = 2;
+        UIRemotePhotoItem *remotePhoto = [[UIRemotePhotoItem alloc] initWithFrame:imageFrame andRemoteURL:remoteUrl];
+        remotePhoto.photoItemView = self;
+        mainImageView = remotePhoto;
+        [self addSubview:remotePhoto];
     }
     return self;
 }
