@@ -74,15 +74,29 @@
 //    DLog(@"%d", index);
 //}
 
-- (IBAction)btnButtonPressed:(UIButton *)sender {
-    if (vPhotoGallery.galleryMode == UIPhotoGalleryModeCustomView) {
-        vPhotoGallery.subviewGap = 50;
-        vPhotoGallery.verticalGallery = vPhotoGallery.peakSubView = NO;
-        vPhotoGallery.galleryMode = UIPhotoGalleryModeImageRemote;
-    } else if (vPhotoGallery.galleryMode == UIPhotoGalleryModeImageRemote) {
-        vPhotoGallery.subviewGap = 30;
-        vPhotoGallery.verticalGallery = vPhotoGallery.peakSubView = YES;
-        vPhotoGallery.galleryMode = UIPhotoGalleryModeCustomView;
+- (IBAction)segGalleryModeChanged:(UISegmentedControl *)sender {
+    vPhotoGallery.galleryMode = (UIPhotoGalleryMode)sender.selectedSegmentIndex;
+    
+    switch (sender.selectedSegmentIndex) {
+        case UIPhotoGalleryModeImageLocal:
+            vPhotoGallery.subviewGap = 30;
+            vPhotoGallery.verticalGallery = NO;
+            vPhotoGallery.peakSubView = YES;
+            break;
+            
+        case UIPhotoGalleryModeImageRemote:
+            vPhotoGallery.subviewGap = 30;
+            vPhotoGallery.verticalGallery = YES;
+            vPhotoGallery.peakSubView = NO;
+            break;
+            
+        case UIPhotoGalleryModeCustomView:
+            vPhotoGallery.subviewGap = 50;
+            vPhotoGallery.verticalGallery = vPhotoGallery.peakSubView = YES;
+            break;
+            
+        default:
+            break;
     }
 }
 

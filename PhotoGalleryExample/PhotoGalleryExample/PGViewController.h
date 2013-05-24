@@ -14,4 +14,6 @@
     IBOutlet UIPhotoGalleryView *vPhotoGallery;
 }
 
+- (IBAction)segGalleryModeChanged:(UISegmentedControl *)sender;
+
 @end
