@@ -65,7 +65,7 @@
 - (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
     CGFloat width = MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
-    topView.backgroundColor = [UIColor clearColor];
+    topView.backgroundColor = [UIColor whiteColor];
     
     UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeInfoDark];
     btnClose.frame = CGRectMake(width-30, 10, 20, 20);
@@ -80,7 +80,10 @@
 }
 
 - (void)goBackFromGallery {
-    [photoGalleryVC dismissViewControllerAnimated:YES completion:NULL];
+    if (photoGalleryVC.navigationController)
+        [photoGalleryVC.navigationController popViewControllerAnimated:YES];
+    else
+        [photoGalleryVC dismissViewControllerAnimated:YES completion:NULL];
 }
 
 #pragma UIPhotoGalleryDelegate methods
@@ -95,11 +98,20 @@
 }
 
 - (IBAction)btnFullscreenPressed:(UIButton *)sender {
-    photoGalleryVC = [[UIPhotoGalleryViewController alloc] initWithGalleryMode:UIPhotoGalleryModeImageRemote];
-    photoGalleryVC.dataSource = self;
-//    [self.navigationController pushViewController:photoGalleryVC animated:YES];
-    photoGalleryVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-    [self presentViewController:photoGalleryVC animated:YES completion:NULL];
+    if (!photoGalleryVC) {
+        photoGalleryVC = [[UIPhotoGalleryViewController alloc] init];
+        photoGalleryVC.dataSource = self;
+    } else {
+        photoGalleryVC.galleryMode = UIPhotoGalleryModeCustomView;
+        photoGalleryVC.initialIndex = 4;
+    }
+    
+    if (self.navigationController)
+        [self.navigationController pushViewController:photoGalleryVC animated:YES];
+    else {
+        photoGalleryVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentViewController:photoGalleryVC animated:YES completion:NULL];
+    }
 }
 
 - (IBAction)segGalleryModeChanged:(UISegmentedControl *)sender {

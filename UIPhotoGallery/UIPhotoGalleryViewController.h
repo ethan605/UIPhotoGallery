@@ -14,7 +14,7 @@
 }
 
 @property (nonatomic, assign) id<UIPhotoGalleryDataSource> dataSource;
-
-- (id)initWithGalleryMode:(UIPhotoGalleryMode)galleryMode;
+@property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
+@property (nonatomic, assign) NSInteger initialIndex;
 
 @end

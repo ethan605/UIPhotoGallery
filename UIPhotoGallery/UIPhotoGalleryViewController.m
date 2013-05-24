@@ -27,7 +27,7 @@
 
 @implementation UIPhotoGalleryViewController
 
-- (id)initWithGalleryMode:(UIPhotoGalleryMode)galleryMode {
+- (id)init {
     if (self = [super init]) {
         self.view.frame = [UIScreen mainScreen].bounds;
         self.view.backgroundColor = [UIColor blackColor];
@@ -36,7 +36,6 @@
         vPhotoGallery = [[UIPhotoGalleryView alloc] initWithFrame:[UIScreen mainScreen].bounds];
         vPhotoGallery.dataSource = self;
         vPhotoGallery.delegate = self;
-        vPhotoGallery.galleryMode = galleryMode;
         
         [self.view addSubview:vPhotoGallery];
         
@@ -59,14 +58,21 @@
     if (!statusBarHidden) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         self.view.frame = [UIScreen mainScreen].bounds;
+        
+        if (self.navigationController)
+            [self.navigationController setNavigationBarHidden:YES animated:YES];
     }
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
-    if (!statusBarHidden)
+    if (!statusBarHidden) {
         [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+        
+        if (self.navigationController)
+            [self.navigationController setNavigationBarHidden:NO animated:YES];
+    }
 }
 
 #pragma get-set methods
@@ -80,6 +86,16 @@
     
     [self setupTopBar];
     [self setupBottomBar];
+}
+
+- (void)setGalleryMode:(UIPhotoGalleryMode)galleryMode {
+    _galleryMode = galleryMode;
+    vPhotoGallery.galleryMode = galleryMode;
+}
+
+- (void)setInitialIndex:(NSInteger)initialIndex {
+    _initialIndex = initialIndex;
+    vPhotoGallery.initialIndex = initialIndex;
 }
 
 #pragma UIPhotoGalleryDataSource methods

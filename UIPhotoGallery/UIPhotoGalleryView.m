@@ -167,6 +167,7 @@
 - (void)initMainScrollView {
     _galleryMode = UIPhotoGalleryModeImageLocal;
     _subviewGap = kDefaultSubviewGap;
+    _peakSubView = NO;
     _verticalGallery = NO;
     _initialIndex = 0;
     
