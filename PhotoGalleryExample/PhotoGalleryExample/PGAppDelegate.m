@@ -17,7 +17,9 @@
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     
-    self.window.rootViewController = [[PGViewController alloc] init];
+    UINavigationController *navVC = [[UINavigationController alloc] initWithRootViewController:[[PGViewController alloc] init]];
+    
+    self.window.rootViewController = navVC;
     
     [[SDImageCache sharedImageCache] clearDisk];
     [[SDImageCache sharedImageCache] cleanDisk];
