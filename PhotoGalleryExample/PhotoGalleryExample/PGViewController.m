@@ -1,0 +1,84 @@
+//
+//  PGViewController.m
+//  PhotoGalleryExample
+//
+//  Created by Ethan Nguyen on 5/24/13.
+//
+//
+
+#import "PGViewController.h"
+#import "UIPhotoGalleryView.h"
+
+@interface PGViewController () {
+    NSArray *sampleURLs;
+}
+
+@end
+
+@implementation PGViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    //    vPhotoGallery.frame = self.view.frame;
+    vPhotoGallery.galleryMode = UIPhotoGalleryModeImageRemote;
+    vPhotoGallery.initialIndex = 4;
+    vPhotoGallery.subviewGap = 40;
+    
+    sampleURLs = @[
+                   @"http://farm9.staticflickr.com/8418/8782168922_c69e58dcd5_z.jpg",
+                   @"http://farm8.staticflickr.com/7407/8717876655_13bcca7b16_z.jpg",
+                   @"http://farm9.staticflickr.com/8127/8708655358_817632ca88_z.jpg",
+                   @"http://farm9.staticflickr.com/8258/8707530059_005b8d30ff_z.jpg",
+                   @"http://farm9.staticflickr.com/8137/8707528977_e9662f67b6_z.jpg",
+                   @"http://farm9.staticflickr.com/8117/8704889239_a3ba9a50e7_z.jpg",
+                   @"http://farm9.staticflickr.com/8280/8706003566_cf3207145a_z.jpg",
+                   @"http://farm9.staticflickr.com/8405/8704879333_6fe24e8675_z.jpg",
+                   @"http://farm9.staticflickr.com/8258/8705999562_6b39e981d9_z.jpg",
+                   @"http://farm9.staticflickr.com/8395/8705998628_4ab56a6746_z.jpg"
+                   ];
+}
+
+#pragma UIPhotoGalleryDataSource methods
+- (NSInteger)numberOfViewsInPhotoGallery:(UIPhotoGalleryView *)photoGallery {
+    return 10;
+}
+
+- (NSURL*)photoGallery:(UIPhotoGalleryView *)photoGallery remoteImageURLAtIndex:(NSInteger)index {
+    return sampleURLs[index];
+}
+
+- (UIView*)photoGallery:(UIPhotoGalleryView *)photoGallery customViewAtIndex:(NSInteger)index {
+    CGRect frame = CGRectMake(0, 0, photoGallery.frame.size.width, photoGallery.frame.size.height);
+    UIView *view = [[UIView alloc] initWithFrame:frame];
+    view.backgroundColor = [UIColor whiteColor];
+    
+    UILabel *label = [[UILabel alloc] initWithFrame:frame];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = [NSString stringWithFormat:@"%d", index+1];
+    [view addSubview:label];
+    
+    return view;
+}
+
+#pragma UIPhotoGalleryDelegate methods
+- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didSingleTapViewAtIndex:(NSInteger)index {
+}
+
+//- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didDoubleTapViewAtIndex:(NSInteger)index {
+//    DLog(@"%d", index);
+//}
+
+- (IBAction)btnButtonPressed:(UIButton *)sender {
+    if (vPhotoGallery.galleryMode == UIPhotoGalleryModeCustomView) {
+        vPhotoGallery.subviewGap = 50;
+        vPhotoGallery.verticalGallery = vPhotoGallery.peakSubView = NO;
+        vPhotoGallery.galleryMode = UIPhotoGalleryModeImageRemote;
+    } else if (vPhotoGallery.galleryMode == UIPhotoGalleryModeImageRemote) {
+        vPhotoGallery.subviewGap = 30;
+        vPhotoGallery.verticalGallery = vPhotoGallery.peakSubView = YES;
+        vPhotoGallery.galleryMode = UIPhotoGalleryModeCustomView;
+    }
+}
+
+@end

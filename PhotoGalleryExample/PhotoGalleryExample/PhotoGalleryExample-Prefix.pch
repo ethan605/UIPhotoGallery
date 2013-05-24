@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'UIPhotoGallery' target in the 'UIPhotoGallery' project
+// Prefix header for all source files of the 'PhotoGalleryExample' target in the 'PhotoGalleryExample' project
 //
 
 #import <Availability.h>
