@@ -63,11 +63,11 @@
 }
 
 - (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
-    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 40)];
     topView.backgroundColor = [UIColor clearColor];
     
     UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeInfoDark];
-    btnClose.frame = CGRectMake(290, 10, 20, 20);
+    btnClose.frame = CGRectMake(self.view.frame.size.width-30, 10, 20, 20);
     btnClose.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
     [btnClose setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [btnClose addTarget:self
@@ -94,7 +94,7 @@
 }
 
 - (IBAction)btnFullscreenPressed:(UIButton *)sender {
-    photoGalleryVC = [[UIPhotoGalleryViewController alloc] initWithGalleryMode:UIPhotoGalleryModeCustomView];
+    photoGalleryVC = [[UIPhotoGalleryViewController alloc] initWithGalleryMode:UIPhotoGalleryModeImageRemote];
     photoGalleryVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     photoGalleryVC.dataSource = self;
     [self presentViewController:photoGalleryVC animated:YES completion:NULL];

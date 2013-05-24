@@ -111,9 +111,13 @@
         topView.alpha = !controlViewHidden;
         
         frame = bottomView.frame;
-        frame.origin.y = self.view.frame.size.height - (!controlViewHidden)*frame.size.height;
-        bottomView.frame = frame;
         
+        if (controlViewHidden)
+            frame.origin.y += frame.size.height;
+        else
+            frame.origin.y -= frame.size.height;
+        
+        bottomView.frame = frame;
         bottomView.alpha = !controlViewHidden;
     }];
 }
