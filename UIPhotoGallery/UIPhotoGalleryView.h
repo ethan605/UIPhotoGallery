@@ -14,7 +14,7 @@ typedef enum UIPhotoGalleryModeEnum {
     UIPhotoGalleryModeCustomView
 } UIPhotoGalleryMode;
 
-@class UIPhotoGalleryView;
+@class UIPhotoGalleryView, UIPhotoGalleryViewController;
 
 @protocol UIPhotoGalleryDataSource <NSObject>
 
@@ -25,6 +25,9 @@ typedef enum UIPhotoGalleryModeEnum {
 - (UIImage*)photoGallery:(UIPhotoGalleryView*)photoGallery localImageAtIndex:(NSInteger)index;
 - (NSURL*)photoGallery:(UIPhotoGalleryView*)photoGallery remoteImageURLAtIndex:(NSInteger)index;
 - (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewAtIndex:(NSInteger)index;
+
+- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
+- (UIView*)customBottomViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
 
 @end
 
@@ -62,5 +65,8 @@ typedef enum UIPhotoGalleryModeEnum {
 @property (nonatomic, assign) BOOL verticalGallery;
 @property (nonatomic, assign) CGFloat subviewGap;
 @property (nonatomic, assign) NSInteger initialIndex;
+
+- (BOOL)scrollToPage:(NSInteger)page;
+- (BOOL)scrollToBesidePage:(NSInteger)delta;
 
 @end

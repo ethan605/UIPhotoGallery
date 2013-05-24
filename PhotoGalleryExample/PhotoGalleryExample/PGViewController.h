@@ -7,13 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIPhotoGalleryView.h"
 
-@class UIPhotoGalleryView;
+@class UIPhotoGalleryViewController;
 
-@interface PGViewController : UIViewController {
+@interface PGViewController : UIViewController<UIPhotoGalleryDataSource, UIPhotoGalleryDelegate> {
     IBOutlet UIPhotoGalleryView *vPhotoGallery;
+    
+    UIPhotoGalleryViewController *photoGalleryVC;
 }
 
+- (IBAction)btnFullscreenPressed:(UIButton *)sender;
 - (IBAction)segGalleryModeChanged:(UISegmentedControl *)sender;
 
 @end

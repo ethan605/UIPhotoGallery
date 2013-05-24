@@ -27,6 +27,10 @@
 
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
+        self.autoresizingMask =
+        UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |
+        UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
         [self initMainScrollView];
     }
     
@@ -120,6 +124,30 @@
     mainScrollView.contentOffset = contentOffset;
 }
 
+#pragma public methods
+- (BOOL)scrollToPage:(NSInteger)page {
+    if (page < 0 || page >= dataSourceNumOfViews || page == currentPage)
+        return NO;
+    
+    currentPage = page;
+    
+    CGPoint contentOffset = mainScrollView.contentOffset;
+    
+    if (_verticalGallery)
+        contentOffset.y = currentPage * mainScrollView.frame.size.height;
+    else
+        contentOffset.x = currentPage * mainScrollView.frame.size.width;
+    
+    [mainScrollView setContentOffset:contentOffset animated:YES];
+    [self scrollViewDidScroll:mainScrollView];
+    
+    return YES;
+}
+
+- (BOOL)scrollToBesidePage:(NSInteger)delta {
+    return [self scrollToPage:currentPage+delta];
+}
+
 #pragma UIScrollViewDelegate methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     NSInteger newPage;
@@ -134,16 +162,6 @@
         [self populateSubviews];
     }
 }
-
-//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-//}
-//
-//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-//    if (decelerate)
-//        return;
-//    
-//    [self scrollViewDidEndDecelerating:scrollView];
-//}
 
 #pragma private methods
 - (void)initMainScrollView {

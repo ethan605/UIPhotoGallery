@@ -33,6 +33,7 @@
 		AAE6816D174F23B8009EBB9D /* sample7.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AAE68162174F23B8009EBB9D /* sample7.jpg */; };
 		AAE6816E174F23B8009EBB9D /* sample8.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AAE68163174F23B8009EBB9D /* sample8.jpg */; };
 		AAE6816F174F23B8009EBB9D /* sample9.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AAE68164174F23B8009EBB9D /* sample9.jpg */; };
+		AAE68172174F45A1009EBB9D /* UIPhotoGalleryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AAE68171174F45A1009EBB9D /* UIPhotoGalleryViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,8 @@
 		AAE68162174F23B8009EBB9D /* sample7.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample7.jpg; sourceTree = "<group>"; };
 		AAE68163174F23B8009EBB9D /* sample8.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample8.jpg; sourceTree = "<group>"; };
 		AAE68164174F23B8009EBB9D /* sample9.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample9.jpg; sourceTree = "<group>"; };
+		AAE68170174F45A1009EBB9D /* UIPhotoGalleryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIPhotoGalleryViewController.h; sourceTree = "<group>"; };
+		AAE68171174F45A1009EBB9D /* UIPhotoGalleryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIPhotoGalleryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,6 +161,8 @@
 			children = (
 				AAE68149174F14DD009EBB9D /* UIPhotoGalleryView.h */,
 				AAE6814A174F14DD009EBB9D /* UIPhotoGalleryView.m */,
+				AAE68170174F45A1009EBB9D /* UIPhotoGalleryViewController.h */,
+				AAE68171174F45A1009EBB9D /* UIPhotoGalleryViewController.m */,
 				AAE6814B174F14DD009EBB9D /* UIPhotoItemView.h */,
 				AAE6814C174F14DD009EBB9D /* UIPhotoItemView.m */,
 			);
@@ -273,6 +278,7 @@
 				AAE6814D174F14DD009EBB9D /* UIPhotoGalleryView.m in Sources */,
 				AAE6814E174F14DD009EBB9D /* UIPhotoItemView.m in Sources */,
 				AAE68156174F1530009EBB9D /* PGViewController.m in Sources */,
+				AAE68172174F45A1009EBB9D /* UIPhotoGalleryViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,8 +7,8 @@
 //
 
 #import "PGAppDelegate.h"
-#import "PGViewController.h"
 #import <SDWebImage/SDImageCache.h>
+#import "PGViewController.h"
 
 @implementation PGAppDelegate
 

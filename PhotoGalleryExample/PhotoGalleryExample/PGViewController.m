@@ -8,6 +8,7 @@
 
 #import "PGViewController.h"
 #import "UIPhotoGalleryView.h"
+#import "UIPhotoGalleryViewController.h"
 
 @interface PGViewController () {
     NSArray *sampleURLs;
@@ -61,6 +62,26 @@
     return view;
 }
 
+- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
+    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+    topView.backgroundColor = [UIColor clearColor];
+    
+    UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeInfoDark];
+    btnClose.frame = CGRectMake(290, 10, 20, 20);
+    btnClose.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    [btnClose setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [btnClose addTarget:self
+                 action:@selector(goBackFromGallery)
+       forControlEvents:UIControlEventTouchUpInside];
+    [topView addSubview:btnClose];
+    
+    return topView;
+}
+
+- (void)goBackFromGallery {
+    [photoGalleryVC dismissViewControllerAnimated:YES completion:NULL];
+}
+
 #pragma UIPhotoGalleryDelegate methods
 - (void)photoGallery:(UIPhotoGalleryView *)photoGallery didTapAtIndex:(NSInteger)index {
 }
@@ -70,6 +91,13 @@
         return YES;
     
     return NO;
+}
+
+- (IBAction)btnFullscreenPressed:(UIButton *)sender {
+    photoGalleryVC = [[UIPhotoGalleryViewController alloc] initWithGalleryMode:UIPhotoGalleryModeCustomView];
+    photoGalleryVC.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+    photoGalleryVC.dataSource = self;
+    [self presentViewController:photoGalleryVC animated:YES completion:NULL];
 }
 
 - (IBAction)segGalleryModeChanged:(UISegmentedControl *)sender {
