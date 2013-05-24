@@ -19,7 +19,7 @@
 - (void)setupMainScrollView;
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index;
 - (void)populateSubviews;
-- (UIView*)viewToBeAddedAtIndex:(NSInteger)index;
+- (UIScrollView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
 
 @end
 
@@ -51,14 +51,14 @@
 - (void)setCircleScroll:(BOOL)circleScroll {
     _circleScroll = circleScroll;
     
-    if (_circleScroll) {
-        circleScrollViews = [NSMutableArray array];
-        
-        for (NSInteger index = -2; index < 2; index++) {
-            NSInteger indexToAdd = (dataSourceNumOfViews + index) % dataSourceNumOfViews;
-            UIView *viewToAdd = [self viewToBeAddedAtIndex:indexToAdd];
-            [circleScrollViews addObject:viewToAdd];
-            
+//    if (_circleScroll) {
+//        circleScrollViews = [NSMutableArray array];
+//        
+//        for (NSInteger index = -2; index < 2; index++) {
+//            NSInteger indexToAdd = (dataSourceNumOfViews + index) % dataSourceNumOfViews;
+//            UIView *viewToAdd = [self viewToBeAddedAtIndex:indexToAdd];
+//            [circleScrollViews addObject:viewToAdd];
+    
 //            CGRect frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
 //            
 //            if (_verticalGallery)
@@ -71,13 +71,13 @@
 //            UIPhotoItemView *subView = [[UIPhotoItemView alloc] initWithFrame:frame andSubView:viewToAdd];
 //            subView.tag = currentPage + index;
 //            subView.galleryDelegate = self;
-        }
-    } else {
-        for (UIView *view in circleScrollViews)
-            [view removeFromSuperview];
-        
-        circleScrollViews = nil;
-    }
+//        }
+//    } else {
+//        for (UIView *view in circleScrollViews)
+//            [view removeFromSuperview];
+//        
+//        circleScrollViews = nil;
+//    }
 }
 
 - (void)setPeakSubView:(BOOL)peakSubView {
@@ -265,51 +265,52 @@
         else
             frame.origin.x = assertIndex * mainScrollView.frame.size.width;
         
-        UIView *viewToAdd = [self viewToBeAddedAtIndex:assertIndex];
+        UIScrollView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage + index];
         
-        UIPhotoItemView *subView = [[UIPhotoItemView alloc] initWithFrame:frame andSubView:viewToAdd];
-        subView.tag = currentPage + index;
-        subView.galleryDelegate = self;
-        
-        [mainScrollView addSubview:subView];
-        [reusableViews addObject:subView];
+        if (subView) {
+            [mainScrollView addSubview:subView];
+            [reusableViews addObject:subView];
+        }
     }
 }
 
-- (UIView*)viewToBeAddedAtIndex:(NSInteger)index {
+- (UIScrollView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index {
+    CGRect displayFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    
     switch (_galleryMode) {
         case UIPhotoGalleryModeImageLocal: {
             UIImage *image = [_dataSource photoGallery:self localImageAtIndex:index];
             
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:
-                                      CGRectMake(0, 0,
-                                                 mainScrollView.frame.size.width,
-                                                 mainScrollView.frame.size.height)];
-            imageView.backgroundColor = [UIColor clearColor];
-            imageView.contentMode = UIViewContentModeScaleAspectFit;
-            imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [imageView setImage:image];
+            UIPhotoItemView *subView =
+            [[UIPhotoItemView alloc] initWithFrame:frame andLocalImage:image atFrame:displayFrame];
             
-            return imageView;
+            subView.tag = index;
+            subView.galleryDelegate = self;
+            
+            return subView;
         }
             
         case UIPhotoGalleryModeImageRemote: {
             NSURL *url = [_dataSource photoGallery:self remoteImageURLAtIndex:index];
+            UIPhotoItemView *subView =
+            [[UIPhotoItemView alloc] initWithFrame:frame andRemoteURL:url atFrame:displayFrame];
             
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:
-                                      CGRectMake(0, 0,
-                                                 mainScrollView.frame.size.width,
-                                                 mainScrollView.frame.size.height)];
-            imageView.backgroundColor = [UIColor clearColor];
-            imageView.contentMode = UIViewContentModeScaleAspectFit;
-            imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-            [imageView setImageWithURL:url];
+            subView.tag = index;
+            subView.galleryDelegate = self;
             
-            return imageView;
+            return subView;
         }
             
-        case UIPhotoGalleryModeCustomView:
-            return [_dataSource photoGallery:self customViewAtIndex:index];
+        case UIPhotoGalleryModeCustomView: {
+            UIView *customView = [_dataSource photoGallery:self customViewAtIndex:index];
+            UIPhotoItemView *subView =
+            [[UIPhotoItemView alloc] initWithFrame:frame andCustomView:customView atFrame:displayFrame];
+            
+            subView.tag = index;
+            subView.galleryDelegate = self;
+            
+            return subView;
+        }
 
         default:
             return nil;

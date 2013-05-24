@@ -7,6 +7,41 @@
 //
 
 #import "UIPhotoItemView.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+
+@interface UIRemotePhotoItem : UIImageView
+
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl;
+
+@end
+
+@implementation UIRemotePhotoItem
+
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl {
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor clearColor];
+        self.contentMode = UIViewContentModeScaleAspectFit;
+        self.autoresizingMask =
+        UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |
+        UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        UIActivityIndicatorView *activityIndicator =
+        [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        activityIndicator.frame = frame;
+        [activityIndicator startAnimating];
+        
+        [self addSubview:activityIndicator];
+        
+        [self setImageWithURL:remoteUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+            if (!error)
+                [activityIndicator removeFromSuperview];
+        }];
+    }
+    
+    return self;
+}
+
+@end
 
 @interface UIPhotoItemView ()
 
@@ -16,20 +51,12 @@
 
 @implementation UIPhotoItemView
 
-- (id)initWithFrame:(CGRect)frame andSubView:(UIView *)subView {
+- (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.contentSize = self.frame.size;
         self.backgroundColor = [UIColor clearColor];
         self.clipsToBounds = YES;
         self.delegate = self;
-        
-        if ([subView isMemberOfClass:[UIImageView class]])
-            mainImageView = (UIImageView*)subView;
-        
-        self.minimumZoomScale = 1;
-        self.maximumZoomScale = 1 + (mainImageView != nil);
-    
-        [self addSubview:subView];
         
         UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc]
                                                     initWithTarget:self
@@ -51,6 +78,41 @@
     return self;
 }
 
+- (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage *)localImage atFrame:(CGRect)imageFrame {
+    if (self = [self initWithFrame:frame]) {
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+        imageView.backgroundColor = [UIColor clearColor];
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [imageView setImage:localImage];
+        
+        mainImageView = imageView;
+        
+        self.minimumZoomScale = 1;
+        self.maximumZoomScale = 2;
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl atFrame:(CGRect)imageFrame {
+    if (self = [self initWithFrame:frame]) {
+        mainImageView = [[UIRemotePhotoItem alloc] initWithFrame:imageFrame andRemoteURL:remoteUrl];
+        [self addSubview:mainImageView];
+        
+        self.minimumZoomScale = 1;
+        self.maximumZoomScale = 2;
+    }
+    return self;
+}
+
+- (id)initWithFrame:(CGRect)frame andCustomView:(UIView *)customView atFrame:(CGRect)viewFrame {
+    if (self = [self initWithFrame:frame]) {
+        [self addSubview:customView];
+    }
+    
+    return self;
+}
+
 - (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGesture {
     UIPhotoGalleryView *photoGallery = (UIPhotoGalleryView*)_galleryDelegate;
     
@@ -60,7 +122,7 @@
     } else {
         if ([photoGallery.delegate respondsToSelector:@selector(photoGallery:didDoubleTapViewAtIndex:)])
             [photoGallery.delegate photoGallery:photoGallery didDoubleTapViewAtIndex:self.tag];
-        else if (mainImageView)
+        else if (mainImageView.image)
             [self zoomFromLocation:[tapGesture locationInView:self]];
     }
 }

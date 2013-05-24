@@ -12,3 +12,5 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 #endif
+
+#define DLog(format, ...) NSLog((@"Func: %s , Line: %d, " format), __PRETTY_FUNCTION__, __LINE__, ##__VA_ARGS__)

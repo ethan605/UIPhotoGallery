@@ -16,6 +16,8 @@
 
 @property (nonatomic, assign) id<UIPhotoItemDelegate> galleryDelegate;
 
-- (id)initWithFrame:(CGRect)frame andSubView:(UIView*)subView;
+- (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage*)localImage atFrame:(CGRect)imageFrame;
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL*)remoteUrl atFrame:(CGRect)imageFrame;
+- (id)initWithFrame:(CGRect)frame andCustomView:(UIView*)customView atFrame:(CGRect)viewFrame;
 
 @end
