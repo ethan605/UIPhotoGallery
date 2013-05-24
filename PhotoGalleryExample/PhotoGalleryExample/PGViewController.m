@@ -20,11 +20,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //    vPhotoGallery.frame = self.view.frame;
-    vPhotoGallery.galleryMode = UIPhotoGalleryModeImageLocal;
-    vPhotoGallery.initialIndex = 4;
-    vPhotoGallery.subviewGap = 40;
-    
     sampleURLs = @[
                    @"http://l.yimg.com/g/images/bg_error_hold_your_clicks.jpg",
                    @"http://farm9.staticflickr.com/8418/8782168922_c69e58dcd5_z.jpg",
@@ -67,12 +62,15 @@
 }
 
 #pragma UIPhotoGalleryDelegate methods
-- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didSingleTapViewAtIndex:(NSInteger)index {
+- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didTapAtIndex:(NSInteger)index {
 }
 
-//- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didDoubleTapViewAtIndex:(NSInteger)index {
-//    DLog(@"%d", index);
-//}
+- (BOOL)photoGallery:(UIPhotoGalleryView *)photoGallery willHandleDoubleTapAtIndex:(NSInteger)index {
+    if (photoGallery.galleryMode == UIPhotoGalleryModeImageLocal)
+        return YES;
+    
+    return NO;
+}
 
 - (IBAction)segGalleryModeChanged:(UISegmentedControl *)sender {
     vPhotoGallery.galleryMode = (UIPhotoGalleryMode)sender.selectedSegmentIndex;
@@ -86,8 +84,7 @@
             
         case UIPhotoGalleryModeImageRemote:
             vPhotoGallery.subviewGap = 30;
-            vPhotoGallery.verticalGallery = YES;
-            vPhotoGallery.peakSubView = NO;
+            vPhotoGallery.verticalGallery = vPhotoGallery.peakSubView = NO;
             break;
             
         case UIPhotoGalleryModeCustomView:
@@ -98,6 +95,8 @@
         default:
             break;
     }
+    
+    [vPhotoGallery layoutSubviews];
 }
 
 @end

@@ -28,11 +28,11 @@ typedef enum UIPhotoGalleryModeEnum {
 
 @end
 
-@protocol UIPhotoGalleryDelegate <NSObject>
+@protocol UIPhotoGalleryDelegate <UIScrollViewDelegate>
 
 @optional
-- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didSingleTapViewAtIndex:(NSInteger)index;
-- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didDoubleTapViewAtIndex:(NSInteger)index;
+- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didTapAtIndex:(NSInteger)index;
+- (BOOL)photoGallery:(UIPhotoGalleryView*)photoGallery willHandleDoubleTapAtIndex:(NSInteger)index;
 
 @end
 

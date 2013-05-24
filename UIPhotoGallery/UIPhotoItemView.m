@@ -131,12 +131,12 @@
     UIPhotoGalleryView *photoGallery = (UIPhotoGalleryView*)_galleryDelegate;
     
     if (tapGesture.numberOfTapsRequired == 1) {
-        if ([photoGallery.delegate respondsToSelector:@selector(photoGallery:didSingleTapViewAtIndex:)])
-            [photoGallery.delegate photoGallery:photoGallery didSingleTapViewAtIndex:self.tag];
+        if ([photoGallery.delegate respondsToSelector:@selector(photoGallery:didTapAtIndex:)])
+            [photoGallery.delegate photoGallery:photoGallery didTapAtIndex:self.tag];
     } else {
-        if ([photoGallery.delegate respondsToSelector:@selector(photoGallery:didDoubleTapViewAtIndex:)])
-            [photoGallery.delegate photoGallery:photoGallery didDoubleTapViewAtIndex:self.tag];
-        else if (mainImageView.image)
+        if (([photoGallery.delegate respondsToSelector:@selector(photoGallery:willHandleDoubleTapAtIndex:)] &&
+             [photoGallery.delegate photoGallery:photoGallery willHandleDoubleTapAtIndex:self.tag]) ||
+            ![photoGallery.delegate respondsToSelector:@selector(photoGallery:willHandleDoubleTapAtIndex:)])
             [self zoomFromLocation:[tapGesture locationInView:self]];
     }
 }

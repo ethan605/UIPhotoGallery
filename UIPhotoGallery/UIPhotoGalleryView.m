@@ -135,28 +135,19 @@
     }
 }
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-}
-
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (decelerate)
-        return;
-    
-    [self scrollViewDidEndDecelerating:scrollView];
-}
-
-- (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    if (scrollView.tag == -1 || ![scrollView.subviews[0] isMemberOfClass:[UIImageView class]])
-        return nil;
-    
-//    DLog(@"%d", scrollView.tag);
-    
-    return scrollView.subviews[0];
-}
+//- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+//}
+//
+//- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+//    if (decelerate)
+//        return;
+//    
+//    [self scrollViewDidEndDecelerating:scrollView];
+//}
 
 #pragma private methods
 - (void)initMainScrollView {
-    _galleryMode = UIPhotoGalleryModeCustomView;
+    _galleryMode = UIPhotoGalleryModeImageLocal;
     _subviewGap = kDefaultSubviewGap;
     _verticalGallery = NO;
     _initialIndex = 0;
