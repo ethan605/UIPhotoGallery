@@ -14,6 +14,17 @@ typedef enum UIPhotoGalleryModeEnum {
     UIPhotoGalleryModeCustomView
 } UIPhotoGalleryMode;
 
+typedef enum UIPhotoCaptionModeEnum {
+    UIPhotoCaptionModeShared = 0,
+    UIPhotoCaptionModeSeparated
+} UIPhotoCaptionMode;
+
+typedef enum UIPhotoCaptionStyleEnum {
+    UIPhotoCaptionStylePlainText = 0,
+    UIPhotoCaptionStyleAttributedText,
+    UIPhotoCaptionStyleCustomView
+} UIPhotoCaptionStyle;
+
 @class UIPhotoGalleryView, UIPhotoGalleryViewController;
 
 @protocol UIPhotoGalleryDataSource <NSObject>
@@ -60,6 +71,8 @@ typedef enum UIPhotoGalleryModeEnum {
 @property (nonatomic, assign) IBOutlet id<UIPhotoGalleryDelegate> delegate;
 
 @property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
+@property (nonatomic, assign) UIPhotoCaptionMode captionMode;
+@property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
 @property (nonatomic, assign) BOOL circleScroll;
 @property (nonatomic, assign) BOOL peakSubView;
 @property (nonatomic, assign) BOOL verticalGallery;

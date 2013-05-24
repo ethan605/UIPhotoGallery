@@ -98,6 +98,12 @@
 }
 
 - (IBAction)btnFullscreenPressed:(UIButton *)sender {
+    if (vPhotoGallery.captionMode == UIPhotoCaptionModeShared)
+        vPhotoGallery.captionMode = UIPhotoCaptionModeSeparated;
+    else
+        vPhotoGallery.captionMode = UIPhotoCaptionModeShared;
+    return;
+    
     if (!photoGalleryVC) {
         photoGalleryVC = [[UIPhotoGalleryViewController alloc] init];
         photoGalleryVC.dataSource = self;

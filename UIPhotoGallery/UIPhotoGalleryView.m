@@ -19,7 +19,8 @@
 - (void)setupMainScrollView;
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index;
 - (void)populateSubviews;
-- (UIScrollView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
+- (void)populateCaptions;
+- (UIPhotoItemView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
 
 @end
 
@@ -50,6 +51,15 @@
 - (void)setGalleryMode:(UIPhotoGalleryMode)galleryMode {
     _galleryMode = galleryMode;
     [self layoutSubviews];
+}
+
+- (void)setCaptionMode:(UIPhotoCaptionMode)captionMode {
+    _captionMode = captionMode;
+    [self populateCaptions];
+}
+
+- (void)setCaptionStyle:(UIPhotoCaptionStyle)captionStyle {
+    _captionStyle = captionStyle;
 }
 
 - (void)setCircleScroll:(BOOL)circleScroll {
@@ -166,6 +176,7 @@
 #pragma private methods
 - (void)initMainScrollView {
     _galleryMode = UIPhotoGalleryModeImageLocal;
+    _captionMode = UIPhotoCaptionModeShared;
     _subviewGap = kDefaultSubviewGap;
     _peakSubView = NO;
     _verticalGallery = NO;
@@ -275,7 +286,9 @@
         else
             frame.origin.x = assertIndex * mainScrollView.frame.size.width;
         
-        UIScrollView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage + index];
+        UIPhotoItemView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage + index];
+        [subView setCaptionWithPlainText:@"Vivamus ut nibh velit, sit amet ornare enim. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."];
+        [subView setCaptionHide:YES withAnimation:NO];
         
         if (subView) {
             [mainScrollView addSubview:subView];
@@ -284,7 +297,12 @@
     }
 }
 
-- (UIScrollView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index {
+- (void)populateCaptions {
+    for (UIPhotoItemView *subView in mainScrollView.subviews)
+        [subView setCaptionHide:(_captionMode == UIPhotoCaptionModeShared) withAnimation:YES];
+}
+
+- (UIPhotoItemView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index {
     CGRect displayFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     
     switch (_galleryMode) {
