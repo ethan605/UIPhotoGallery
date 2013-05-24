@@ -1,18 +1,16 @@
-# Xcode
-.DS_Store
-build/
-*.pbxuser
-!default.pbxuser
-*.mode1v3
-!default.mode1v3
-*.mode2v3
-!default.mode2v3
+# xcode noise
+build/*
+*.perspective
 *.perspectivev3
-!default.perspectivev3
+*.pbxuser
 *.xcworkspace
-!default.xcworkspace
+*.mode1
+*.mode2v3
+*.mode1v3
 xcuserdata
-profile
-*.moved-aside
-DerivedData
-.idea/
+Snapshots
+upendo/design
+DerivedData/*
+
+# osx noise
+.DS_Store
