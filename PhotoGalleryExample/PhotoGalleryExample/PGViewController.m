@@ -67,13 +67,19 @@
 }
 
 - (NSAttributedString*)photoGallery:(UIPhotoGalleryView *)photoGallery attributedTextCaptionAtIndex:(NSInteger)index {
-    return [[NSAttributedString alloc] initWithString:sampleURLs[index]];
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:sampleURLs[index]];
+    [attributedText addAttribute:NSBackgroundColorAttributeName value:[UIColor yellowColor] range:NSMakeRange(3,5)];
+    [attributedText addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(10,7)];
+    [attributedText addAttribute:NSFontAttributeName
+                           value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0]
+                           range:NSMakeRange(20, 10)];
+    DLog(@"%@", NSStringFromCGSize([attributedText size]));
+    return attributedText;
 }
 
 - (UIView*)photoGallery:(UIPhotoGalleryView *)photoGallery customViewCaptionAtIndex:(NSInteger)index {
     UILabel *customView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
     customView.text = sampleURLs[index];
-    customView.backgroundColor = [UIColor clearColor];
     
     return customView;
 }

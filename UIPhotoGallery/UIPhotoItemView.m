@@ -269,8 +269,13 @@
                      orAttributedText:(NSAttributedString *)attributedText
                             fromFrame:(CGRect)frame {
     UIFont *captionFont = [UIFont systemFontOfSize:14];
-    CGSize captionSize = [plainText sizeWithFont:captionFont
-                               constrainedToSize:CGSizeMake(frame.size.width, MAXFLOAT)];
+    CGSize captionSize;
+    
+    if (plainText)
+        captionSize = [plainText sizeWithFont:captionFont
+                            constrainedToSize:CGSizeMake(frame.size.width, MAXFLOAT)];
+    else
+        captionSize = [attributedText size];
     
     if (captionSize.height > frame.size.height/3)
         captionSize.height = frame.size.height/3;
