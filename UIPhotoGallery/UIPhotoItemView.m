@@ -179,14 +179,16 @@
 
 @interface UIPhotoCaptionView ()
 
-- (UILabel*)captionLabelWithPlainText:(NSString*)plainText orAttributedText:(NSAttributedString*)attributedText;
+- (UILabel*)captionLabelWithPlainText:(NSString*)plainText
+                     orAttributedText:(NSAttributedString*)attributedText
+                            fromFrame:(CGRect)frame;
 
 @end
 
 @implementation UIPhotoCaptionView
 
 - (id)initWithPlainText:(NSString *)plainText fromFrame:(CGRect)frame {
-    UILabel *captionLabel = [self captionLabelWithPlainText:plainText orAttributedText:nil];
+    UILabel *captionLabel = [self captionLabelWithPlainText:plainText orAttributedText:nil fromFrame:frame];
     
     UIView *backgroundView = [[UIView alloc] initWithFrame:captionLabel.frame];
     backgroundView.backgroundColor = [UIColor blackColor];
@@ -207,7 +209,7 @@
 }
 
 - (id)initWithAttributedText:(NSAttributedString *)attributedText fromFrame:(CGRect)frame {
-    UILabel *captionLabel = [self captionLabelWithPlainText:nil orAttributedText:attributedText];
+    UILabel *captionLabel = [self captionLabelWithPlainText:nil orAttributedText:attributedText fromFrame:frame];
     
     UIView *backgroundView = [[UIView alloc] initWithFrame:captionLabel.frame];
     backgroundView.backgroundColor = [UIColor blackColor];
@@ -229,26 +231,29 @@
 
 - (id)initWithCustomView:(UIView *)customView fromFrame:(CGRect)frame {
     CGRect captionFrame = CGRectMake(0, frame.size.height-customView.frame.size.height,
-                                     customView.frame.size.width, customView.frame.size.height);
+                                     frame.size.width, customView.frame.size.height);
     
     if (self = [super initWithFrame:captionFrame]) {
         self.backgroundColor = [UIColor clearColor];
         self.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+        
+        [self addSubview:customView];
     }
     
     return self;
 }
 
 - (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated {
-    if (self.superview)
+    if (!self.superview)
         return;
     
     CGRect superViewFrame = self.superview.frame;
     
     if (!animated) {
         CGRect frame = self.frame;
-        frame.origin.y = superViewFrame.size.height;
+        frame.origin.y = superViewFrame.size.height - (!hide)*self.frame.size.height;
         self.frame = frame;
+        self.alpha = !hide;
         return;
     }
     
@@ -256,19 +261,21 @@
         CGRect frame = self.frame;
         frame.origin.y = superViewFrame.size.height - (!hide)*self.frame.size.height;
         self.frame = frame;
+        self.alpha = !hide;
     }];
 }
 
-- (UILabel*)captionLabelWithPlainText:(NSString *)plainText orAttributedText:(NSAttributedString *)attributedText {
+- (UILabel*)captionLabelWithPlainText:(NSString *)plainText
+                     orAttributedText:(NSAttributedString *)attributedText
+                            fromFrame:(CGRect)frame {
     UIFont *captionFont = [UIFont systemFontOfSize:14];
     CGSize captionSize = [plainText sizeWithFont:captionFont
-                               constrainedToSize:CGSizeMake(self.frame.size.width, MAXFLOAT)];
+                               constrainedToSize:CGSizeMake(frame.size.width, MAXFLOAT)];
     
-    if (captionSize.height > self.frame.size.height/3)
-        captionSize.height = self.frame.size.height/3;
+    if (captionSize.height > frame.size.height/3)
+        captionSize.height = frame.size.height/3;
     
-    UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0,
-                                                                      self.frame.size.width, captionSize.height)];
+    UILabel *captionLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, captionSize.height)];
     captionLabel.backgroundColor = [UIColor clearColor];
     captionLabel.font = captionFont;
     captionLabel.numberOfLines = 0;

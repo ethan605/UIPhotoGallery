@@ -14,18 +14,13 @@ typedef enum UIPhotoGalleryModeEnum {
     UIPhotoGalleryModeCustomView
 } UIPhotoGalleryMode;
 
-typedef enum UIPhotoCaptionModeEnum {
-    UIPhotoCaptionModeShared = 0,
-    UIPhotoCaptionModeSeparated
-} UIPhotoCaptionMode;
-
 typedef enum UIPhotoCaptionStyleEnum {
     UIPhotoCaptionStylePlainText = 0,
     UIPhotoCaptionStyleAttributedText,
     UIPhotoCaptionStyleCustomView
 } UIPhotoCaptionStyle;
 
-@class UIPhotoGalleryView, UIPhotoGalleryViewController;
+@class UIPhotoGalleryView, UIPhotoGalleryViewController, UIPhotoCaptionView;
 
 @protocol UIPhotoGalleryDataSource <NSObject>
 
@@ -36,6 +31,10 @@ typedef enum UIPhotoCaptionStyleEnum {
 - (UIImage*)photoGallery:(UIPhotoGalleryView*)photoGallery localImageAtIndex:(NSInteger)index;
 - (NSURL*)photoGallery:(UIPhotoGalleryView*)photoGallery remoteImageURLAtIndex:(NSInteger)index;
 - (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewAtIndex:(NSInteger)index;
+
+- (NSString*)photoGallery:(UIPhotoGalleryView*)photoGallery plainTextCaptionAtIndex:(NSInteger)index;
+- (NSAttributedString*)photoGallery:(UIPhotoGalleryView*)photoGallery attributedTextCaptionAtIndex:(NSInteger)index;
+- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewCaptionAtIndex:(NSInteger)index;
 
 - (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
 - (UIView*)customBottomViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
@@ -61,6 +60,7 @@ typedef enum UIPhotoCaptionStyleEnum {
 @interface UIPhotoGalleryView : UIView <UIScrollViewDelegate, UIPhotoItemDelegate> {
 @private
     UIScrollView *mainScrollView;
+    UIPhotoCaptionView *mainCaptionView;
     NSMutableSet *reusableViews;
     NSMutableArray *circleScrollViews;
     NSInteger dataSourceNumOfViews;
@@ -71,7 +71,6 @@ typedef enum UIPhotoCaptionStyleEnum {
 @property (nonatomic, assign) IBOutlet id<UIPhotoGalleryDelegate> delegate;
 
 @property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
-@property (nonatomic, assign) UIPhotoCaptionMode captionMode;
 @property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
 @property (nonatomic, assign) BOOL circleScroll;
 @property (nonatomic, assign) BOOL peakSubView;

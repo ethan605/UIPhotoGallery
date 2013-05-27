@@ -19,7 +19,6 @@
 - (void)setupMainScrollView;
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index;
 - (void)populateSubviews;
-- (void)populateCaptions;
 - (UIPhotoItemView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
 
 @end
@@ -53,13 +52,9 @@
     [self layoutSubviews];
 }
 
-- (void)setCaptionMode:(UIPhotoCaptionMode)captionMode {
-    _captionMode = captionMode;
-    [self populateCaptions];
-}
-
 - (void)setCaptionStyle:(UIPhotoCaptionStyle)captionStyle {
     _captionStyle = captionStyle;
+    [self layoutSubviews];
 }
 
 - (void)setCircleScroll:(BOOL)circleScroll {
@@ -176,7 +171,7 @@
 #pragma private methods
 - (void)initMainScrollView {
     _galleryMode = UIPhotoGalleryModeImageLocal;
-    _captionMode = UIPhotoCaptionModeShared;
+    _captionStyle = UIPhotoCaptionStylePlainText;
     _subviewGap = kDefaultSubviewGap;
     _peakSubView = NO;
     _verticalGallery = NO;
@@ -286,9 +281,7 @@
         else
             frame.origin.x = assertIndex * mainScrollView.frame.size.width;
         
-        UIPhotoItemView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage + index];
-        [subView setCaptionWithPlainText:@"Vivamus ut nibh velit, sit amet ornare enim. Nulla facilisi. Lorem ipsum dolor sit amet, consectetur adipiscing elit."];
-        [subView setCaptionHide:YES withAnimation:NO];
+        UIPhotoItemView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage+index];
         
         if (subView) {
             [mainScrollView addSubview:subView];
@@ -297,52 +290,79 @@
     }
 }
 
-- (void)populateCaptions {
-    for (UIPhotoItemView *subView in mainScrollView.subviews)
-        [subView setCaptionHide:(_captionMode == UIPhotoCaptionModeShared) withAnimation:YES];
-}
-
 - (UIPhotoItemView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index {
     CGRect displayFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    
+    UIPhotoItemView *subView = nil;
     
     switch (_galleryMode) {
         case UIPhotoGalleryModeImageLocal: {
             UIImage *image = [_dataSource photoGallery:self localImageAtIndex:index];
             
-            UIPhotoItemView *subView =
-            [[UIPhotoItemView alloc] initWithFrame:frame andLocalImage:image atFrame:displayFrame];
-            
+            subView = [[UIPhotoItemView alloc] initWithFrame:frame andLocalImage:image atFrame:displayFrame];
             subView.tag = index;
             subView.galleryDelegate = self;
             
-            return subView;
+            break;
         }
             
         case UIPhotoGalleryModeImageRemote: {
             NSURL *url = [_dataSource photoGallery:self remoteImageURLAtIndex:index];
-            UIPhotoItemView *subView =
-            [[UIPhotoItemView alloc] initWithFrame:frame andRemoteURL:url atFrame:displayFrame];
             
+            subView = [[UIPhotoItemView alloc] initWithFrame:frame andRemoteURL:url atFrame:displayFrame];
             subView.tag = index;
             subView.galleryDelegate = self;
             
-            return subView;
+            break;
         }
             
         case UIPhotoGalleryModeCustomView: {
             UIView *customView = [_dataSource photoGallery:self customViewAtIndex:index];
-            UIPhotoItemView *subView =
-            [[UIPhotoItemView alloc] initWithFrame:frame andCustomView:customView atFrame:displayFrame];
             
+            subView = [[UIPhotoItemView alloc] initWithFrame:frame andCustomView:customView atFrame:displayFrame];
             subView.tag = index;
             subView.galleryDelegate = self;
             
-            return subView;
+            break;
         }
 
         default:
-            return nil;
+            break;
     }
+    
+    if (!subView)
+        return nil;
+    
+    switch (_captionStyle) {
+        case UIPhotoCaptionStylePlainText:
+            if ([_dataSource respondsToSelector:@selector(photoGallery:plainTextCaptionAtIndex:)]) {
+                NSString *plainText = [_dataSource photoGallery:self plainTextCaptionAtIndex:index];
+                [subView setCaptionWithPlainText:plainText];
+            }
+            
+            break;
+            
+        case UIPhotoCaptionStyleAttributedText:
+            if ([_dataSource respondsToSelector:@selector(photoGallery:attributedTextCaptionAtIndex:)]) {
+                NSAttributedString *attributedText = [_dataSource photoGallery:self attributedTextCaptionAtIndex:index];
+                [subView setCaptionWithAttributedText:attributedText];
+            }
+            
+            break;
+            
+        case UIPhotoCaptionStyleCustomView:
+            if ([_dataSource respondsToSelector:@selector(photoGallery:customViewAtIndex:)]) {
+                UIView *customView = [_dataSource photoGallery:self customViewCaptionAtIndex:index];
+                [subView setCaptionWithCustomView:customView];
+            }
+            
+            break;
+            
+        default:
+            break;
+    }
+    
+    return subView;
 }
 
 @end

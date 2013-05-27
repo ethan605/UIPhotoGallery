@@ -62,6 +62,22 @@
     return view;
 }
 
+- (NSString*)photoGallery:(UIPhotoGalleryView *)photoGallery plainTextCaptionAtIndex:(NSInteger)index {
+    return sampleURLs[index];
+}
+
+- (NSAttributedString*)photoGallery:(UIPhotoGalleryView *)photoGallery attributedTextCaptionAtIndex:(NSInteger)index {
+    return [[NSAttributedString alloc] initWithString:sampleURLs[index]];
+}
+
+- (UIView*)photoGallery:(UIPhotoGalleryView *)photoGallery customViewCaptionAtIndex:(NSInteger)index {
+    UILabel *customView = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 30)];
+    customView.text = sampleURLs[index];
+    customView.backgroundColor = [UIColor clearColor];
+    
+    return customView;
+}
+
 - (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
     CGFloat width = MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
@@ -98,10 +114,7 @@
 }
 
 - (IBAction)btnFullscreenPressed:(UIButton *)sender {
-    if (vPhotoGallery.captionMode == UIPhotoCaptionModeShared)
-        vPhotoGallery.captionMode = UIPhotoCaptionModeSeparated;
-    else
-        vPhotoGallery.captionMode = UIPhotoCaptionModeShared;
+    vPhotoGallery.captionStyle = (vPhotoGallery.captionStyle + 1) % 3;
     return;
     
     if (!photoGalleryVC) {
