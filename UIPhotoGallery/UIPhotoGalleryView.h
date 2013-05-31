@@ -78,7 +78,8 @@ typedef enum UIPhotoCaptionStyleEnum {
 @property (nonatomic, assign) CGFloat subviewGap;
 @property (nonatomic, assign) NSInteger initialIndex;
 
-- (BOOL)scrollToPage:(NSInteger)page;
-- (BOOL)scrollToBesidePage:(NSInteger)delta;
+- (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation;
+- (BOOL)scrollToPage:(NSInteger)page animated:(BOOL)animation;
+- (BOOL)scrollToBesidePage:(NSInteger)delta animated:(BOOL)animation;
 
 @end

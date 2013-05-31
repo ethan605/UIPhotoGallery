@@ -115,8 +115,22 @@
 }
 
 - (void)setInitialIndex:(NSInteger)initialIndex {
+    [self setInitialIndex:initialIndex animated:NO];
+}
+
+- (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation {
     _initialIndex = initialIndex;
     currentPage = _initialIndex;
+    
+    [self scrollToPage:currentPage animated:animation];
+}
+
+#pragma public methods
+- (BOOL)scrollToPage:(NSInteger)page animated:(BOOL)animation {
+    if (page < 0 || page >= dataSourceNumOfViews)
+        return NO;
+    
+    currentPage = page;
     [self populateSubviews];
     
     CGPoint contentOffset = mainScrollView.contentOffset;
@@ -126,31 +140,13 @@
     else
         contentOffset.x = currentPage * mainScrollView.frame.size.width;
     
-    mainScrollView.contentOffset = contentOffset;
-}
+    [mainScrollView setContentOffset:contentOffset animated:animation];
 
-#pragma public methods
-- (BOOL)scrollToPage:(NSInteger)page {
-    if (page < 0 || page >= dataSourceNumOfViews || page == currentPage)
-        return NO;
-    
-    currentPage = page;
-    
-    CGPoint contentOffset = mainScrollView.contentOffset;
-    
-    if (_verticalGallery)
-        contentOffset.y = currentPage * mainScrollView.frame.size.height;
-    else
-        contentOffset.x = currentPage * mainScrollView.frame.size.width;
-    
-    [mainScrollView setContentOffset:contentOffset animated:YES];
-    [self scrollViewDidScroll:mainScrollView];
-    
     return YES;
 }
 
-- (BOOL)scrollToBesidePage:(NSInteger)delta {
-    return [self scrollToPage:currentPage+delta];
+- (BOOL)scrollToBesidePage:(NSInteger)delta animated:(BOOL)animation {
+    return [self scrollToPage:currentPage+delta animated:animation];
 }
 
 #pragma UIScrollViewDelegate methods
@@ -228,8 +224,8 @@
     dataSourceNumOfViews = [_dataSource numberOfViewsInPhotoGallery:self];
     
     NSInteger tmpCurrentPage = currentPage;
+    
     [self setSubviewGap:_subviewGap];
-    currentPage = tmpCurrentPage;
     
     CGSize contentSize = mainScrollView.contentSize;
     
@@ -242,11 +238,9 @@
     
     for (UIView *view in mainScrollView.subviews)
         [view removeFromSuperview];
-    
     [reusableViews removeAllObjects];
     
-    [self populateSubviews];
-    [self setInitialIndex:currentPage];
+    [self scrollToPage:tmpCurrentPage animated:NO];
 }
 
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index {

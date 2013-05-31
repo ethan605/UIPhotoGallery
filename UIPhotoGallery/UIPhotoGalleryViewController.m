@@ -200,15 +200,16 @@
 }
 
 - (void)btnDonePressed {
-    [self dismissViewControllerAnimated:YES completion:NULL];
+    [vPhotoGallery scrollToPage:4 animated:YES];
+//    [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)btnPrevPressed {
-    [vPhotoGallery scrollToBesidePage:-1];
+    [vPhotoGallery scrollToBesidePage:-1 animated:YES];
 }
 
 - (void)btnNextPressed {
-    [vPhotoGallery scrollToBesidePage:1];
+    [vPhotoGallery scrollToBesidePage:1 animated:YES];
 }
 
 @end

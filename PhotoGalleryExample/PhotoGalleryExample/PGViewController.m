@@ -83,22 +83,30 @@
     return customView;
 }
 
-- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
-    CGFloat width = MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
-    topView.backgroundColor = [UIColor whiteColor];
-    
-    UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeInfoDark];
-    btnClose.frame = CGRectMake(width-30, 10, 20, 20);
-    btnClose.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-    [btnClose setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [btnClose addTarget:self
-                 action:@selector(goBackFromGallery)
-       forControlEvents:UIControlEventTouchUpInside];
-    [topView addSubview:btnClose];
-    
-    return topView;
-}
+//- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
+//    CGFloat width = MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+//    UIView *topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, 40)];
+//    topView.backgroundColor = [UIColor whiteColor];
+//    
+//    UIButton *btnClose = [UIButton buttonWithType:UIButtonTypeInfoDark];
+//    btnClose.frame = CGRectMake(width-30, 10, 20, 20);
+//    btnClose.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+//    [btnClose setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+//    [btnClose addTarget:self
+//                 action:@selector(goBackFromGallery)
+//       forControlEvents:UIControlEventTouchUpInside];
+//    [topView addSubview:btnClose];
+//    
+//    return topView;
+//}
+
+//- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
+//    return nil;
+//}
+//
+//- (UIView*)customBottomViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
+//    return nil;
+//}
 
 - (void)goBackFromGallery {
     if (photoGalleryVC.navigationController)
