@@ -73,7 +73,6 @@
     [attributedText addAttribute:NSFontAttributeName
                            value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:20.0]
                            range:NSMakeRange(20, 10)];
-    DLog(@"%@", NSStringFromCGSize([attributedText size]));
     return attributedText;
 }
 
@@ -120,8 +119,8 @@
 }
 
 - (IBAction)btnFullscreenPressed:(UIButton *)sender {
-    vPhotoGallery.captionStyle = (vPhotoGallery.captionStyle + 1) % 3;
-    return;
+//    vPhotoGallery.captionStyle = (vPhotoGallery.captionStyle + 1) % 3;
+//    return;
     
     if (!photoGalleryVC) {
         photoGalleryVC = [[UIPhotoGalleryViewController alloc] init];

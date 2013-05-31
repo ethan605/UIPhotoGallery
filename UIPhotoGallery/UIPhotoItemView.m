@@ -11,6 +11,67 @@
 
 #define kMaxZoomingScale            2
 
+@interface UIPhotoContainerView ()
+
+@end
+
+@implementation UIPhotoContainerView
+
+- (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem {
+    CGRect displayFrame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+    
+    if (self = [super initWithFrame:frame]) {
+        switch (galleryMode) {
+            case UIPhotoGalleryModeImageLocal:
+                photoItemView = [[UIPhotoItemView alloc] initWithFrame:displayFrame andLocalImage:galleryItem];
+                break;
+                
+            case UIPhotoGalleryModeImageRemote:
+                photoItemView = [[UIPhotoItemView alloc] initWithFrame:displayFrame andRemoteURL:galleryItem];
+                break;
+                
+            default:
+                photoItemView = [[UIPhotoItemView alloc] initWithFrame:displayFrame andCustomView:galleryItem];
+                break;
+        }
+        
+        [self addSubview:photoItemView];
+    }
+    
+    return self;
+}
+
+- (void)setGalleryDelegate:(id<UIPhotoItemDelegate>)galleryDelegate {
+    _galleryDelegate = galleryDelegate;
+    photoItemView.galleryDelegate = galleryDelegate;
+}
+
+- (void)setCaptionWithStyle:(UIPhotoCaptionStyle)captionStyle andItem:(id)captionItem {
+    [photoCaptionView removeFromSuperview];
+    
+    switch (captionStyle) {
+        case UIPhotoCaptionStylePlainText:
+            photoCaptionView = [[UIPhotoCaptionView alloc] initWithPlainText:captionItem fromFrame:self.frame];
+            break;
+            
+        case UIPhotoCaptionStyleAttributedText:
+            photoCaptionView = [[UIPhotoCaptionView alloc] initWithAttributedText:captionItem fromFrame:self.frame];
+            break;
+            
+        default:
+            photoCaptionView = [[UIPhotoCaptionView alloc] initWithCustomView:captionItem fromFrame:self.frame];
+            break;
+    }
+    
+    [self addSubview:photoCaptionView];
+}
+
+- (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated {
+    [photoCaptionView setCaptionHide:hide withAnimation:animated];
+}
+
+@end
+
 @interface UIPhotoItemView ()
 
 - (void)tapGestureRecognizer:(UITapGestureRecognizer*)tapGesture;
@@ -48,9 +109,9 @@
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage *)localImage atFrame:(CGRect)imageFrame {
+- (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage *)localImage {
     if (self = [self initWithFrame:frame]) {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:imageFrame];
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
         imageView.backgroundColor = [UIColor clearColor];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -63,47 +124,27 @@
         CGFloat heightScale = localImage.size.height / self.frame.size.height;
         self.maximumZoomScale = MIN(widthScale, heightScale) * kMaxZoomingScale;
     }
+    
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl atFrame:(CGRect)imageFrame {
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl {
     if (self = [self initWithFrame:frame]) {
-        UIRemotePhotoItem *remotePhoto = [[UIRemotePhotoItem alloc] initWithFrame:imageFrame andRemoteURL:remoteUrl];
+        UIRemotePhotoItem *remotePhoto = [[UIRemotePhotoItem alloc] initWithFrame:frame andRemoteURL:remoteUrl];
         remotePhoto.photoItemView = self;
         mainImageView = remotePhoto;
         [self addSubview:remotePhoto];
-    }
-    return self;
-}
-
-- (id)initWithFrame:(CGRect)frame andCustomView:(UIView *)customView atFrame:(CGRect)viewFrame {
-    if (self = [self initWithFrame:frame]) {
-        [self addSubview:customView];
     }
     
     return self;
 }
 
-- (void)setCaptionWithPlainText:(NSString *)plainText {
-    [captionView removeFromSuperview];
-    captionView = [[UIPhotoCaptionView alloc] initWithPlainText:plainText fromFrame:self.frame];
-    [self addSubview:captionView];
-}
-
-- (void)setCaptionWithAttributedText:(NSAttributedString *)attributedText {
-    [captionView removeFromSuperview];
-    captionView = [[UIPhotoCaptionView alloc] initWithAttributedText:attributedText fromFrame:self.frame];
-    [self addSubview:captionView];
-}
-
-- (void)setCaptionWithCustomView:(UIView *)customView {
-    [captionView removeFromSuperview];
-    captionView = [[UIPhotoCaptionView alloc] initWithCustomView:customView fromFrame:self.frame];
-    [self addSubview:captionView];
-}
-
-- (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated {
-    [captionView setCaptionHide:hide withAnimation:animated];
+- (id)initWithFrame:(CGRect)frame andCustomView:(UIView *)customView {
+    if (self = [self initWithFrame:frame]) {
+        [self addSubview:customView];
+    }
+    
+    return self;
 }
 
 #pragma private methods

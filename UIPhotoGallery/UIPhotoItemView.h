@@ -9,7 +9,20 @@
 #import <UIKit/UIKit.h>
 #import "UIPhotoGalleryView.h"
 
-@class UIRemotePhotoItem, UIPhotoCaptionView;
+@class UIRemotePhotoItem, UIPhotoCaptionView, UIPhotoItemView;
+
+@interface UIPhotoContainerView : UIView {
+    UIPhotoItemView *photoItemView;
+    UIPhotoCaptionView *photoCaptionView;
+}
+
+@property (nonatomic, assign) id<UIPhotoItemDelegate> galleryDelegate;
+
+- (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem;
+- (void)setCaptionWithStyle:(UIPhotoCaptionStyle)captionStyle andItem:(id)captionItem;
+- (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated;
+
+@end
 
 @interface UIPhotoItemView : UIScrollView <UIScrollViewDelegate> {
 @private
@@ -19,14 +32,9 @@
 
 @property (nonatomic, assign) id<UIPhotoItemDelegate> galleryDelegate;
 
-- (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage*)localImage atFrame:(CGRect)imageFrame;
-- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL*)remoteUrl atFrame:(CGRect)imageFrame;
-- (id)initWithFrame:(CGRect)frame andCustomView:(UIView*)customView atFrame:(CGRect)viewFrame;
-
-- (void)setCaptionWithPlainText:(NSString*)plainText;
-- (void)setCaptionWithAttributedText:(NSAttributedString*)attributedText;
-- (void)setCaptionWithCustomView:(UIView*)customView;
-- (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated;
+- (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage*)localImage;
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL*)remoteUrl;
+- (id)initWithFrame:(CGRect)frame andCustomView:(UIView*)customView;
 
 @end
 
@@ -45,6 +53,5 @@
 - (id)initWithCustomView:(UIView*)customView fromFrame:(CGRect)frame;
 
 - (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated;
-
 
 @end

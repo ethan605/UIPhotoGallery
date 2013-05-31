@@ -19,7 +19,7 @@
 - (void)setupMainScrollView;
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index;
 - (void)populateSubviews;
-- (UIPhotoItemView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
+- (UIPhotoContainerView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
 
 @end
 
@@ -281,7 +281,7 @@
         else
             frame.origin.x = assertIndex * mainScrollView.frame.size.width;
         
-        UIPhotoItemView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage+index];
+        UIPhotoContainerView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage+index];
         
         if (subView) {
             [mainScrollView addSubview:subView];
@@ -290,77 +290,58 @@
     }
 }
 
-- (UIPhotoItemView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index {
-    CGRect displayFrame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-    
-    UIPhotoItemView *subView = nil;
+- (UIPhotoContainerView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index {
+    UIPhotoContainerView *subView = nil;
+    id galleryItem = nil;
     
     switch (_galleryMode) {
-        case UIPhotoGalleryModeImageLocal: {
-            UIImage *image = [_dataSource photoGallery:self localImageAtIndex:index];
-            
-            subView = [[UIPhotoItemView alloc] initWithFrame:frame andLocalImage:image atFrame:displayFrame];
-            subView.tag = index;
-            subView.galleryDelegate = self;
-            
+        case UIPhotoGalleryModeImageLocal:
+            galleryItem = [_dataSource photoGallery:self localImageAtIndex:index];
             break;
-        }
             
-        case UIPhotoGalleryModeImageRemote: {
-            NSURL *url = [_dataSource photoGallery:self remoteImageURLAtIndex:index];
-            
-            subView = [[UIPhotoItemView alloc] initWithFrame:frame andRemoteURL:url atFrame:displayFrame];
-            subView.tag = index;
-            subView.galleryDelegate = self;
-            
+        case UIPhotoGalleryModeImageRemote:
+            galleryItem = [_dataSource photoGallery:self remoteImageURLAtIndex:index];
             break;
-        }
-            
-        case UIPhotoGalleryModeCustomView: {
-            UIView *customView = [_dataSource photoGallery:self customViewAtIndex:index];
-            
-            subView = [[UIPhotoItemView alloc] initWithFrame:frame andCustomView:customView atFrame:displayFrame];
-            subView.tag = index;
-            subView.galleryDelegate = self;
-            
-            break;
-        }
 
         default:
+            galleryItem = [_dataSource photoGallery:self customViewAtIndex:index];
             break;
     }
+    
+    if (!galleryItem)
+        return nil;
+    
+    subView = [[UIPhotoContainerView alloc] initWithFrame:frame andGalleryMode:_galleryMode withItem:galleryItem];
+    subView.tag = index;
+    subView.galleryDelegate = self;
     
     if (!subView)
         return nil;
     
+    id captionItem = nil;
+    
     switch (_captionStyle) {
         case UIPhotoCaptionStylePlainText:
-            if ([_dataSource respondsToSelector:@selector(photoGallery:plainTextCaptionAtIndex:)]) {
-                NSString *plainText = [_dataSource photoGallery:self plainTextCaptionAtIndex:index];
-                [subView setCaptionWithPlainText:plainText];
-            }
-            
+            if ([_dataSource respondsToSelector:@selector(photoGallery:plainTextCaptionAtIndex:)])
+                captionItem = [_dataSource photoGallery:self plainTextCaptionAtIndex:index];
+
             break;
             
         case UIPhotoCaptionStyleAttributedText:
-            if ([_dataSource respondsToSelector:@selector(photoGallery:attributedTextCaptionAtIndex:)]) {
-                NSAttributedString *attributedText = [_dataSource photoGallery:self attributedTextCaptionAtIndex:index];
-                [subView setCaptionWithAttributedText:attributedText];
-            }
-            
-            break;
-            
-        case UIPhotoCaptionStyleCustomView:
-            if ([_dataSource respondsToSelector:@selector(photoGallery:customViewAtIndex:)]) {
-                UIView *customView = [_dataSource photoGallery:self customViewCaptionAtIndex:index];
-                [subView setCaptionWithCustomView:customView];
-            }
+            if ([_dataSource respondsToSelector:@selector(photoGallery:attributedTextCaptionAtIndex:)])
+                captionItem = [_dataSource photoGallery:self attributedTextCaptionAtIndex:index];
             
             break;
             
         default:
+            if ([_dataSource respondsToSelector:@selector(photoGallery:customViewAtIndex:)])
+                captionItem = [_dataSource photoGallery:self customViewCaptionAtIndex:index];
+            
             break;
     }
+    
+    if (captionItem)
+        [subView setCaptionWithStyle:_captionStyle andItem:captionItem];
     
     return subView;
 }
