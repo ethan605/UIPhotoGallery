@@ -154,11 +154,27 @@
     if (tapGesture.numberOfTapsRequired == 1) {
         if ([photoGallery.delegate respondsToSelector:@selector(photoGallery:didTapAtIndex:)])
             [photoGallery.delegate photoGallery:photoGallery didTapAtIndex:self.tag];
-    } else {
-        if (([photoGallery.delegate respondsToSelector:@selector(photoGallery:willHandleDoubleTapAtIndex:)] &&
-             [photoGallery.delegate photoGallery:photoGallery willHandleDoubleTapAtIndex:self.tag]) ||
-            ![photoGallery.delegate respondsToSelector:@selector(photoGallery:willHandleDoubleTapAtIndex:)])
+        return;
+    }
+    
+    if (![photoGallery.delegate respondsToSelector:@selector(photoGallery:doubleTapHandlerAtIndex:)]) {
+        [self zoomFromLocation:[tapGesture locationInView:self]];
+        return;
+    }
+    
+    switch ([photoGallery.delegate photoGallery:photoGallery doubleTapHandlerAtIndex:self.tag]) {
+        case UIPhotoGalleryDoubleTapHandlerZoom:
             [self zoomFromLocation:[tapGesture locationInView:self]];
+            break;
+            
+        case UIPhotoGalleryDoubleTapHandlerCustom:
+            if ([photoGallery.delegate respondsToSelector:@selector(photoGallery:didDoubleTapAtIndex:)])
+                [photoGallery.delegate photoGallery:photoGallery didDoubleTapAtIndex:self.tag];
+            
+            break;
+            
+        default:    // UIPhotoGalleryDoubleTapHandlerNone
+            break;
     }
 }
 

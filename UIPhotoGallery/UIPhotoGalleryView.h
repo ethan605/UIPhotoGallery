@@ -20,6 +20,12 @@ typedef enum UIPhotoCaptionStyleEnum {
     UIPhotoCaptionStyleCustomView
 } UIPhotoCaptionStyle;
 
+typedef enum UIPhotoGalleryDoubleTapHandlerEnum {
+    UIPhotoGalleryDoubleTapHandlerNone = 0,
+    UIPhotoGalleryDoubleTapHandlerZoom,
+    UIPhotoGalleryDoubleTapHandlerCustom
+} UIPhotoGalleryDoubleTapHandler;
+
 @class UIPhotoGalleryView, UIPhotoGalleryViewController, UIPhotoCaptionView;
 
 @protocol UIPhotoGalleryDataSource <NSObject>
@@ -45,7 +51,8 @@ typedef enum UIPhotoCaptionStyleEnum {
 
 @optional
 - (void)photoGallery:(UIPhotoGalleryView*)photoGallery didTapAtIndex:(NSInteger)index;
-- (BOOL)photoGallery:(UIPhotoGalleryView*)photoGallery willHandleDoubleTapAtIndex:(NSInteger)index;
+- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didDoubleTapAtIndex:(NSInteger)index;
+- (UIPhotoGalleryDoubleTapHandler)photoGallery:(UIPhotoGalleryView*)photoGallery doubleTapHandlerAtIndex:(NSInteger)index;
 
 @end
 

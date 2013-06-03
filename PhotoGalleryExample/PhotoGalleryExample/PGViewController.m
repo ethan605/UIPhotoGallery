@@ -21,6 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    vPhotoGallery.galleryMode = UIPhotoGalleryModeCustomView;
+    
     sampleURLs = @[
                    @"http://l.yimg.com/g/images/bg_error_hold_your_clicks.jpg",
                    @"http://farm9.staticflickr.com/8418/8782168922_c69e58dcd5_z.jpg",
@@ -100,10 +102,10 @@
 //    return topView;
 //}
 
-//- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
-//    return nil;
-//}
-//
+- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
+    return nil;
+}
+
 //- (UIView*)customBottomViewForGalleryViewController:(UIPhotoGalleryViewController *)galleryViewController {
 //    return nil;
 //}
@@ -119,23 +121,28 @@
 - (void)photoGallery:(UIPhotoGalleryView *)photoGallery didTapAtIndex:(NSInteger)index {
 }
 
-- (BOOL)photoGallery:(UIPhotoGalleryView *)photoGallery willHandleDoubleTapAtIndex:(NSInteger)index {
-    if (photoGallery.galleryMode == UIPhotoGalleryModeImageLocal)
-        return YES;
-    
-    return NO;
+- (UIPhotoGalleryDoubleTapHandler)photoGallery:(UIPhotoGalleryView *)photoGallery doubleTapHandlerAtIndex:(NSInteger)index {
+    switch (photoGallery.galleryMode) {
+        case UIPhotoGalleryModeImageLocal:
+            return UIPhotoGalleryDoubleTapHandlerZoom;
+            
+        case UIPhotoGalleryModeImageRemote:
+            return UIPhotoGalleryDoubleTapHandlerNone;
+            
+        default:
+            return UIPhotoGalleryDoubleTapHandlerCustom;
+    }
+}
+
+- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didDoubleTapAtIndex:(NSInteger)index {
+    DLog(@"invoke");
 }
 
 - (IBAction)btnFullscreenPressed:(UIButton *)sender {
-//    vPhotoGallery.captionStyle = (vPhotoGallery.captionStyle + 1) % 3;
-//    return;
-    
     if (!photoGalleryVC) {
         photoGalleryVC = [[UIPhotoGalleryViewController alloc] init];
         photoGalleryVC.dataSource = self;
-    } else {
-        photoGalleryVC.galleryMode = UIPhotoGalleryModeCustomView;
-        photoGalleryVC.initialIndex = 4;
+        photoGalleryVC.showStatusBar = YES;
     }
     
     if (self.navigationController)

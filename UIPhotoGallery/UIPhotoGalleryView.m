@@ -59,34 +59,6 @@
 
 - (void)setCircleScroll:(BOOL)circleScroll {
     _circleScroll = circleScroll;
-    
-//    if (_circleScroll) {
-//        circleScrollViews = [NSMutableArray array];
-//        
-//        for (NSInteger index = -2; index < 2; index++) {
-//            NSInteger indexToAdd = (dataSourceNumOfViews + index) % dataSourceNumOfViews;
-//            UIView *viewToAdd = [self viewToBeAddedAtIndex:indexToAdd];
-//            [circleScrollViews addObject:viewToAdd];
-    
-//            CGRect frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
-//            
-//            if (_verticalGallery)
-//                frame.origin.y = assertIndex * mainScrollView.frame.size.height;
-//            else
-//                frame.origin.x = assertIndex * mainScrollView.frame.size.width;
-//            
-//            UIView *viewToAdd = [self viewToBeAddedAtIndex:assertIndex];
-//            
-//            UIPhotoItemView *subView = [[UIPhotoItemView alloc] initWithFrame:frame andSubView:viewToAdd];
-//            subView.tag = currentPage + index;
-//            subView.galleryDelegate = self;
-//        }
-//    } else {
-//        for (UIView *view in circleScrollViews)
-//            [view removeFromSuperview];
-//        
-//        circleScrollViews = nil;
-//    }
 }
 
 - (void)setPeakSubView:(BOOL)peakSubView {

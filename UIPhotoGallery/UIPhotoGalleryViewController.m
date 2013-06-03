@@ -55,7 +55,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    if (!statusBarHidden) {
+    if (!statusBarHidden && !_showStatusBar) {
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
         self.view.frame = [UIScreen mainScreen].bounds;
         
@@ -90,12 +90,37 @@
 
 - (void)setGalleryMode:(UIPhotoGalleryMode)galleryMode {
     _galleryMode = galleryMode;
-    vPhotoGallery.galleryMode = galleryMode;
+    vPhotoGallery.galleryMode = _galleryMode;
+}
+
+- (void)setCaptionStyle:(UIPhotoCaptionStyle)captionStyle {
+    _captionStyle = captionStyle;
+    vPhotoGallery.captionStyle = _captionStyle;
+}
+
+- (void)setCircleScroll:(BOOL)circleScroll {
+    _circleScroll = circleScroll;
+    vPhotoGallery.circleScroll = _circleScroll;
+}
+
+- (void)setPeakSubView:(BOOL)peakSubView {
+    _peakSubView = peakSubView;
+    vPhotoGallery.peakSubView = _peakSubView;
+}
+
+- (void)setVerticalGallery:(BOOL)verticalGallery {
+    _verticalGallery = verticalGallery;
+    vPhotoGallery.verticalGallery = _verticalGallery;
+}
+
+- (void)setSubviewGap:(CGFloat)subviewGap {
+    _subviewGap = subviewGap;
+    vPhotoGallery.subviewGap = _subviewGap;
 }
 
 - (void)setInitialIndex:(NSInteger)initialIndex {
     _initialIndex = initialIndex;
-    vPhotoGallery.initialIndex = initialIndex;
+    vPhotoGallery.initialIndex = _initialIndex;
 }
 
 #pragma UIPhotoGalleryDataSource methods
@@ -200,8 +225,10 @@
 }
 
 - (void)btnDonePressed {
-    [vPhotoGallery scrollToPage:4 animated:YES];
-//    [self dismissViewControllerAnimated:YES completion:NULL];
+    if (self.navigationController)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)btnPrevPressed {
