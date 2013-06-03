@@ -18,7 +18,7 @@
 
 ## DataSource, Delegate, Mode & Style
 
-UIPhotoGallery is implemented in UITableView style, which uses **dataSource** and **delegate** pointers to contruct UI components.
+UIPhotoGallery is implemented in UITableView style, which uses ``dataSource** and **delegate** pointers to contruct UI components.
 
 ### DataSource, Mode & Style
 
@@ -32,7 +32,7 @@ To declare a view component in specific index:
 	- (NSURL*)photoGallery:(UIPhotoGalleryView*)photoGallery remoteImageURLAtIndex:(NSInteger)index;
 	- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewAtIndex:(NSInteger)index;
 	
-At a moment, **_only 1_** method will be used to contruct view components for gallery, depends on UIPhotoGalleryView's `galleryMode` property. So far, there are 3 modes supported:
+At a moment, **_only 1_** method will be used to contruct view components for gallery, depends on UIPhotoGalleryView's **galleryMode** property. So far, there are 3 modes supported:
 
 	UIPhotoGalleryModeImageLocal
     UIPhotoGalleryModeImageRemote
