@@ -2,6 +2,20 @@
 
 **UIPhotoGallery** is a set of extended & customizable views to show Photo Gallery for iOS UIKit. This library contains 2 main components: **UIPhotoGalleryView** & **UIPhotoGalleryViewController**.
 
+### Table of Contents
+1. [DataSource, Delegate, Mode & Style](#datasource-delegate-mode--style)
+	* [DataSource, Mode & Style](#datasource-mode--style)
+	* [Delegate](#delegate)
+2. [UIPhotoGalleryView](#uiphotogalleryview)
+	* [Properties](#properties)
+	* [Methods](#methods)
+3. [UIPhotoGalleryViewController](#uiphotogalleryviewcontroller)
+4. [Installation & Dependencies](installation--dependencies)
+	* [Installation](#installation)
+	* [Setup](#setup)
+	* [Dependencies](#dependencies)
+5. [Licences](#licences)
+
 ## DataSource, Delegate, Mode & Style
 
 UIPhotoGallery is implemented in UITableView style, which uses **dataSource** and **delegate** pointers to contruct UI components.
@@ -18,7 +32,7 @@ To declare a view component in specific index:
 	- (NSURL*)photoGallery:(UIPhotoGalleryView*)photoGallery remoteImageURLAtIndex:(NSInteger)index;
 	- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewAtIndex:(NSInteger)index;
 	
-At a moment, **_only 1_** method will be used to contruct view components for gallery, depends on UIPhotoGalleryView's **galleryMode** property. So far, there are 3 modes supported:
+At a moment, **_only 1_** method will be used to contruct view components for gallery, depends on UIPhotoGalleryView's `galleryMode` property. So far, there are 3 modes supported:
 
 	UIPhotoGalleryModeImageLocal
     UIPhotoGalleryModeImageRemote
@@ -140,7 +154,7 @@ Otherwise, if these methods are implemented and returned **nil**, the respective
 
 By default, for gallery delegate handling, when user single tap in gallery, top and bottom view will be hidden with animation.
 
-## Installation and dependencies
+## Installation & Dependencies
 
 ### Installation
 
