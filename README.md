@@ -93,6 +93,7 @@ There are several properties that are helpful to quickly customize your gallery
 @property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
 @property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
 @property (nonatomic, assign) BOOL peakSubView;
+@property (nonatomic, assign) BOOL showsScrollIndicator;
 @property (nonatomic, assign) BOOL verticalGallery;
 @property (nonatomic, assign) CGFloat subviewGap;
 @property (nonatomic, assign) NSInteger initialIndex;
@@ -106,6 +107,8 @@ Use `peakSubView` to enable/disable gallery item's peak (draw items outside the 
 ```objective-c
 vPhotoGallery.peakSubView = YES;
 ```
+
+Use `showsScrollIndicator` to show/hide scrollbar indicator. The direction of scrollbar is automatically adjusted to reflect gallery scrolling direction.
 
 Use `verticalGallery` to set gallery's scroll direction to horizontal/vertical. By default, this property is set to `NO` (horizontal scrolling).
 

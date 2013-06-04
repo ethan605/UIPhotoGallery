@@ -21,7 +21,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    vPhotoGallery.galleryMode = UIPhotoGalleryModeCustomView;
+    vPhotoGallery.initialIndex = 4;
+    vPhotoGallery.showsScrollIndicator = NO;
     
     sampleURLs = @[
                    @"http://l.yimg.com/g/images/bg_error_hold_your_clicks.jpg",
@@ -44,11 +45,11 @@
 }
 
 - (UIImage*)photoGallery:(UIPhotoGalleryView*)photoGallery localImageAtIndex:(NSInteger)index {
-    return [UIImage imageNamed:[NSString stringWithFormat:@"sample%d.jpg", index]];
+    return [UIImage imageNamed:[NSString stringWithFormat:@"sample%d.jpg", index % 10]];
 }
 
 - (NSURL*)photoGallery:(UIPhotoGalleryView *)photoGallery remoteImageURLAtIndex:(NSInteger)index {
-    return sampleURLs[index];
+    return sampleURLs[index % 10];
 }
 
 - (UIView*)photoGallery:(UIPhotoGalleryView *)photoGallery customViewAtIndex:(NSInteger)index {
@@ -65,7 +66,7 @@
 }
 
 - (NSString*)photoGallery:(UIPhotoGalleryView *)photoGallery plainTextCaptionAtIndex:(NSInteger)index {
-    return sampleURLs[index];
+    return sampleURLs[index % 10];
 }
 
 - (NSAttributedString*)photoGallery:(UIPhotoGalleryView *)photoGallery attributedTextCaptionAtIndex:(NSInteger)index {
@@ -180,4 +181,10 @@
     [vPhotoGallery layoutSubviews];
 }
 
+- (void)viewDidUnload {
+    scrollView = nil;
+    img1 = nil;
+    img2 = nil;
+    [super viewDidUnload];
+}
 @end

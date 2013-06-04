@@ -13,6 +13,9 @@
 
 @interface PGViewController : UIViewController<UIPhotoGalleryDataSource, UIPhotoGalleryDelegate> {
     IBOutlet UIPhotoGalleryView *vPhotoGallery;
+    IBOutlet UIScrollView *scrollView;
+    IBOutlet UIImageView *img1;
+    IBOutlet UIImageView *img2;
     
     UIPhotoGalleryViewController *photoGalleryVC;
 }

@@ -67,7 +67,8 @@ typedef enum UIPhotoGalleryDoubleTapHandlerEnum {
 @interface UIPhotoGalleryView : UIView <UIScrollViewDelegate, UIPhotoItemDelegate> {
 @private
     UIScrollView *mainScrollView;
-    UIPhotoCaptionView *mainCaptionView;
+    UIImageView *mainScrollIndicatorView;
+    
     NSMutableSet *reusableViews;
     NSMutableArray *circleScrollViews;
     NSInteger dataSourceNumOfViews;
@@ -81,6 +82,7 @@ typedef enum UIPhotoGalleryDoubleTapHandlerEnum {
 @property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
 @property (nonatomic, assign) BOOL circleScroll;
 @property (nonatomic, assign) BOOL peakSubView;
+@property (nonatomic, assign) BOOL showsScrollIndicator;
 @property (nonatomic, assign) BOOL verticalGallery;
 @property (nonatomic, assign) CGFloat subviewGap;
 @property (nonatomic, assign) NSInteger initialIndex;

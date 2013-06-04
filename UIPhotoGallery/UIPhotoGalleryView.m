@@ -21,6 +21,9 @@
 - (void)populateSubviews;
 - (UIPhotoContainerView*)viewToBeAddedWithFrame:(CGRect)frame atIndex:(NSInteger)index;
 
+- (void)setupScrollIndicator;
+- (UIImage*)scrollIndicatorForDirection:(BOOL)vertical andLength:(CGFloat)length;
+
 @end
 
 @implementation UIPhotoGalleryView
@@ -64,6 +67,12 @@
 - (void)setPeakSubView:(BOOL)peakSubView {
     _peakSubView = peakSubView;
     mainScrollView.clipsToBounds = _peakSubView;
+}
+
+- (void)setShowsScrollIndicator:(BOOL)showsScrollIndicator {
+    _showsScrollIndicator = showsScrollIndicator;
+    
+    [self setupScrollIndicator];
 }
 
 - (void)setVerticalGallery:(BOOL)verticalGallery {
@@ -127,17 +136,55 @@
 
 #pragma UIScrollViewDelegate methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    NSInteger newPage;
+    CGFloat newPage;
+    CGFloat scrollIndicatorMoveSpace = 0;
+
+    CGRect frame = mainScrollIndicatorView.frame;
     
-    if (_verticalGallery)
+    if (_verticalGallery) {
         newPage = scrollView.contentOffset.y / scrollView.frame.size.height;
-    else
+        scrollIndicatorMoveSpace = (self.frame.size.height - mainScrollIndicatorView.frame.size.height)/(dataSourceNumOfViews-1);
+        frame.origin.y = newPage*scrollIndicatorMoveSpace;
+    } else {
         newPage = scrollView.contentOffset.x / scrollView.frame.size.width;
+        scrollIndicatorMoveSpace = (self.frame.size.width - mainScrollIndicatorView.frame.size.width)/(dataSourceNumOfViews-1);
+        frame.origin.x = newPage*scrollIndicatorMoveSpace;
+    }
     
-    if (newPage != currentPage) {
-        currentPage = newPage;
+    mainScrollIndicatorView.frame = frame;
+    
+    if (((NSInteger)newPage) != currentPage) {
+        currentPage = (NSInteger)newPage;
         [self populateSubviews];
     }
+}
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
+    mainScrollIndicatorView.tag = 1;
+    [UIView animateWithDuration:0.3 animations:^{
+        mainScrollIndicatorView.alpha = 1;
+    }];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if (decelerate)
+        return;
+    
+    [self scrollViewDidEndDecelerating:scrollView];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    mainScrollIndicatorView.tag = 0;
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if (mainScrollIndicatorView.tag == 0) {
+            [UIView animateWithDuration:0.5 animations:^{
+                mainScrollIndicatorView.alpha = 0;
+            }];
+        }
+    });
 }
 
 #pragma private methods
@@ -146,6 +193,7 @@
     _captionStyle = UIPhotoCaptionStylePlainText;
     _subviewGap = kDefaultSubviewGap;
     _peakSubView = NO;
+    _showsScrollIndicator = YES;
     _verticalGallery = NO;
     _initialIndex = 0;
     
@@ -158,13 +206,12 @@
     
     mainScrollView = [[UIScrollView alloc] initWithFrame:frame];
     mainScrollView.autoresizingMask = self.autoresizingMask;
-    mainScrollView.contentSize = frame.size;
-    mainScrollView.pagingEnabled = YES;
     mainScrollView.backgroundColor = [UIColor clearColor];
-    mainScrollView.delegate = self;
-    mainScrollView.showsHorizontalScrollIndicator = mainScrollView.showsVerticalScrollIndicator = NO;
     mainScrollView.clipsToBounds = NO;
-    mainScrollView.tag = -1;
+    mainScrollView.contentSize = frame.size;
+    mainScrollView.delegate = self;
+    mainScrollView.pagingEnabled = YES;
+    mainScrollView.showsHorizontalScrollIndicator = mainScrollView.showsVerticalScrollIndicator = NO;
     
     [self addSubview:mainScrollView];
     
@@ -213,10 +260,13 @@
     mainScrollView.contentSize = contentSize;
     
     for (UIView *view in mainScrollView.subviews)
-        [view removeFromSuperview];
+        if ([view isMemberOfClass:[UIPhotoContainerView class]])
+            [view removeFromSuperview];
+    
     [reusableViews removeAllObjects];
     
     [self scrollToPage:tmpCurrentPage animated:NO];
+    [self setupScrollIndicator];
 }
 
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index {
@@ -314,6 +364,68 @@
         [subView setCaptionWithStyle:_captionStyle andItem:captionItem];
     
     return subView;
+}
+
+- (void)setupScrollIndicator {
+    [mainScrollIndicatorView removeFromSuperview];
+    
+    if (!_showsScrollIndicator)
+        return;
+    
+    CGFloat scrollIndicatorLength = 0;
+    
+    if (_verticalGallery)
+        scrollIndicatorLength = self.frame.size.height / dataSourceNumOfViews;
+    else
+        scrollIndicatorLength = self.frame.size.width / dataSourceNumOfViews;
+    
+    UIImage *scrollIndicator = [self scrollIndicatorForDirection:_verticalGallery andLength:scrollIndicatorLength];
+    
+    mainScrollIndicatorView = [[UIImageView alloc] initWithImage:scrollIndicator];
+    
+    CGRect frame = mainScrollIndicatorView.frame;
+    
+    if (_verticalGallery) {
+        frame.origin.x = self.frame.size.width-frame.size.width;
+        frame.origin.y = 0;
+    } else {
+        frame.origin.x = 0;
+        frame.origin.y = self.frame.size.height-frame.size.height;
+    }
+    
+    mainScrollIndicatorView.frame = frame;
+    mainScrollIndicatorView.alpha = 0;
+    [self addSubview:mainScrollIndicatorView];
+}
+
+- (UIImage*)scrollIndicatorForDirection:(BOOL)vertical andLength:(CGFloat)length {
+    CGFloat radius = 3.5;
+    CGFloat ratio = 1.5*length/radius;
+    
+    if (ratio < 2.5)
+        ratio = 2.5;
+    
+    CGSize size = CGSizeMake(radius*2*(vertical ?: ratio), radius*2*(vertical*ratio ?: 1));
+    CGFloat lineWidth = 0.5;
+    
+    UIGraphicsBeginImageContext(size);
+	CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, lineWidth);
+    CGContextSetAlpha(context, 0.8);
+    
+    CGContextBeginPath(context);
+    CGContextAddArc(context, radius, radius, radius-lineWidth,
+                    -M_PI_2 - M_PI_2*vertical, M_PI_2 - M_PI_2*vertical, !vertical);
+    CGContextAddArc(context, size.width-radius, size.height-radius, radius-lineWidth,
+                    M_PI_2 - M_PI_2*vertical, -M_PI_2 - M_PI_2*vertical, !vertical);
+    CGContextClosePath(context);
+    
+    [[UIColor grayColor] set];
+    CGContextStrokePath(context);
+	UIImage *scrollIndicator = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return scrollIndicator;
 }
 
 @end
