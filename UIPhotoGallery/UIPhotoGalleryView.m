@@ -97,6 +97,10 @@
     [self scrollToPage:currentPage animated:animation];
 }
 
+- (NSInteger)currentIndex {
+    return currentPage;
+}
+
 #pragma public methods
 - (BOOL)scrollToPage:(NSInteger)page animated:(BOOL)animation {
     if (page < 0 || page >= dataSourceNumOfViews)
