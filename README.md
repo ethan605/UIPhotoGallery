@@ -25,48 +25,62 @@ UIPhotoGallery is implemented in UITableView style, which uses `dataSource` and 
 
 To declare number of views showing in gallery:
 
-	- (NSInteger)numberOfViewsInPhotoGallery:(UIPhotoGalleryView*)photoGallery;
+```objective-c
+- (NSInteger)numberOfViewsInPhotoGallery:(UIPhotoGalleryView*)photoGallery;
+```
 	
 To declare a view component in specific index:
 
-	- (UIImage*)photoGallery:(UIPhotoGalleryView*)photoGallery localImageAtIndex:(NSInteger)index;
-	- (NSURL*)photoGallery:(UIPhotoGalleryView*)photoGallery remoteImageURLAtIndex:(NSInteger)index;
-	- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewAtIndex:(NSInteger)index;
-	
+```objective-c
+- (UIImage*)photoGallery:(UIPhotoGalleryView*)photoGallery localImageAtIndex:(NSInteger)index;
+- (NSURL*)photoGallery:(UIPhotoGalleryView*)photoGallery remoteImageURLAtIndex:(NSInteger)index;
+- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewAtIndex:(NSInteger)index;
+```
+
 At a moment, **only one** method will be used to contruct view components for gallery, depends on UIPhotoGalleryView's `galleryMode` property. So far, there are 3 modes supported:
 
-	UIPhotoGalleryModeImageLocal
-    UIPhotoGalleryModeImageRemote
-    UIPhotoGalleryModeCustomView
+```objective-c
+UIPhotoGalleryModeImageLocal
+UIPhotoGalleryModeImageRemote
+UIPhotoGalleryModeCustomView
+```
 
 To declare a caption component in specific index:
-	
-	- (NSString*)photoGallery:(UIPhotoGalleryView*)photoGallery plainTextCaptionAtIndex:(NSInteger)index;
-	- (NSAttributedString*)photoGallery:(UIPhotoGalleryView*)photoGallery attributedTextCaptionAtIndex:(NSInteger)index;
-	- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewCaptionAtIndex:(NSInteger)index;
+
+```objective-c
+- (NSString*)photoGallery:(UIPhotoGalleryView*)photoGallery plainTextCaptionAtIndex:(NSInteger)index;
+- (NSAttributedString*)photoGallery:(UIPhotoGalleryView*)photoGallery attributedTextCaptionAtIndex:(NSInteger)index;
+- (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewCaptionAtIndex:(NSInteger)index;
+```
 
 Similar to view component, **only one** caption contruction method is used at a moment to contruct caption for gallery item, depends on `UIPhotoGalleryView`'s `captionStyle`, including 3 supported styles so far:
 
-	UIPhotoCaptionStylePlainText
-    UIPhotoCaptionStyleAttributedText
-    UIPhotoCaptionStyleCustomView
+```objective-c
+UIPhotoCaptionStylePlainText
+UIPhotoCaptionStyleAttributedText
+UIPhotoCaptionStyleCustomView
+```
 
 ### Delegate
 
 So far, UIPhotoGallery provides 2 delegate methods:
 
-	- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didTapAtIndex:(NSInteger)index;
-	- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didDoubleTapAtIndex:(NSInteger)index;
-	- (UIPhotoGalleryDoubleTapHandler)photoGallery:(UIPhotoGalleryView*)photoGallery doubleTapHandlerAtIndex:(NSInteger)index;
+```objective-c
+- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didTapAtIndex:(NSInteger)index;
+- (void)photoGallery:(UIPhotoGalleryView*)photoGallery didDoubleTapAtIndex:(NSInteger)index;
+- (UIPhotoGalleryDoubleTapHandler)photoGallery:(UIPhotoGalleryView*)photoGallery doubleTapHandlerAtIndex:(NSInteger)index;
+```
 
 Use `photoGallery:didTapAtIndex:` method to handle single tap at gallery item.
 
 Use `photoGallery:doubleTapHandlerAtIndex:` method to set default action for double tap gesture recognizer. Options including:
 
-	UIPhotoGalleryDoubleTapHandlerNone
-    UIPhotoGalleryDoubleTapHandlerZoom
-    UIPhotoGalleryDoubleTapHandlerCustom
- 
+```objective-c
+UIPhotoGalleryDoubleTapHandlerNone
+UIPhotoGalleryDoubleTapHandlerZoom
+UIPhotoGalleryDoubleTapHandlerCustom
+```
+
 If this method return `UIPhotoGalleryDoubleTapHandlerZoom`, current photo item  will be zoomed at tapping position. If `UIPhotoGalleryDoubleTapHandlerCustom` returned, action will be dispatched to `photoGallery:didDoubleTapAtIndex:` if  implemented. Otherwise, if `UIPhotoGalleryDoubleTapHandlerNone` returned, nothing happens.
 
 ## UIPhotoGalleryView
@@ -75,31 +89,41 @@ If this method return `UIPhotoGalleryDoubleTapHandlerZoom`, current photo item  
 
 There are several properties that are helpful to quickly customize your gallery
 
-	@property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
-	@property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
-	@property (nonatomic, assign) BOOL peakSubView;
-	@property (nonatomic, assign) BOOL verticalGallery;
-	@property (nonatomic, assign) CGFloat subviewGap;
-	@property (nonatomic, assign) NSInteger initialIndex;
-	@property (nonatomic, readonly) NSInteger currentIndex;
-	
+```objective-c
+@property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
+@property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
+@property (nonatomic, assign) BOOL peakSubView;
+@property (nonatomic, assign) BOOL verticalGallery;
+@property (nonatomic, assign) CGFloat subviewGap;
+@property (nonatomic, assign) NSInteger initialIndex;
+@property (nonatomic, readonly) NSInteger currentIndex;
+```
+
 As mentioned above, `galleryMode` and `captionStyle` are used to change gallery's mode (showing local images, remote images or custom views) and caption style (plain texts, attributed texts or custom views). By default, `galleryMode` is set to `UIPhotoGalleryModeLocalImage` and `captionStyle` is set to `UIPhotoCaptionStylePlainText`.
 
 Use `peakSubView` to enable/disable gallery item's peak (draw items outside the UIPhotoGallery's frame). By default, this property is set to `NO`.
 
-	vPhotoGallery.peakSubView = YES;
+```objective-c
+vPhotoGallery.peakSubView = YES;
+```
 
 Use `verticalGallery` to set gallery's scroll direction to horizontal/vertical. By default, this property is set to `NO` (horizontal scrolling).
 
-	vPhotoGallery.verticalGallery = YES;
+```objective-c
+vPhotoGallery.verticalGallery = YES;
+```
 
 Use `subviewGap` to adjust a blank gap between gallery items. By default, this property is set to `30.0`.
 
-	vPhotoGallery.subviewGap = 50;
+```objective-c
+vPhotoGallery.subviewGap = 50;
+```
 
 Use `initialIndex` to set the initial position when view is loaded. By default, this property is set to `0`.
 
-	vPhotoGallery.initialIndex = 4;
+```objective-c
+vPhotoGallery.initialIndex = 4;
+```
 
 The readonly `currentIndex` property returns current showing gallery item index.
 
@@ -109,21 +133,26 @@ The readonly `currentIndex` property returns current showing gallery item index.
 
 Comming along with properties to customize gallery's style, some helper methods are provided to control the scrolling of your gallery.
 
-	- (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation;
-	- (BOOL)scrollToPage:(NSInteger)page animated:(BOOL)animation;
-	- (BOOL)scrollToBesidePage:(NSInteger)delta animated:(BOOL)animation;
-	
+```objective-c
+- (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation;
+- (BOOL)scrollToPage:(NSInteger)page animated:(BOOL)animation;
+- (BOOL)scrollToBesidePage:(NSInteger)delta animated:(BOOL)animation;
+```
+
 The method `setInitialIndex:animated:` is an alternative way to animate the initialization page setup. The default `initialIndex` property has no animation effect.
 
-	[vPhotoGallery setInitialIndex:4 animated:YES];
-	
-	[vPhotoGallery setInitialIndex:4 animated:NO]; // Equivalent to vPhotoGallery.initialIndex = 4;
+```objective-c
+[vPhotoGallery setInitialIndex:4 animated:YES];	
+[vPhotoGallery setInitialIndex:4 animated:NO]; // Equivalent to vPhotoGallery.initialIndex = 4;
+```
 
 The method `scrollToBeSidePage` use a NSInteger `delta` param to scroll to the next or previous delta pages from current page.
 
-	[vPhotoGallery scrollToBesidePage:1 animated:YES];
-	[vPhotoGallery scrollToBesidePage:-2 animated:YES];
-	
+```objective-c
+[vPhotoGallery scrollToBesidePage:1 animated:YES];
+[vPhotoGallery scrollToBesidePage:-2 animated:YES];
+```
+
 All validation of page index are done for you and returned `YES` if the index is valid and scrolling is made, otherwise `NO`.
 
 ## UIPhotoGalleryViewController
@@ -132,23 +161,27 @@ As an extension, UIPhotoGalleryViewController is created to help simplify your p
 
 There are same properties with `UIPhotoGalleryView` that you can use to set for your `vPhotoGallery`, except `delegate` (by default, gallery's delegate is handled by the view controller itself):
 
-	@property (nonatomic, assign) id<UIPhotoGalleryDataSource> dataSource;
-	@property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
-	@property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
-	@property (nonatomic, assign) BOOL circleScroll;
-	@property (nonatomic, assign) BOOL peakSubView;
-	@property (nonatomic, assign) BOOL verticalGallery;
-	@property (nonatomic, assign) CGFloat subviewGap;
-	@property (nonatomic, assign) NSInteger initialIndex;
+```objective-c
+@property (nonatomic, assign) id<UIPhotoGalleryDataSource> dataSource;
+@property (nonatomic, assign) UIPhotoGalleryMode galleryMode;
+@property (nonatomic, assign) UIPhotoCaptionStyle captionStyle;
+@property (nonatomic, assign) BOOL circleScroll;
+@property (nonatomic, assign) BOOL peakSubView;
+@property (nonatomic, assign) BOOL verticalGallery;
+@property (nonatomic, assign) CGFloat subviewGap;
+@property (nonatomic, assign) NSInteger initialIndex;
 
-	@property (nonatomic, assign) BOOL showStatusBar;
+@property (nonatomic, assign) BOOL showStatusBar;
+```
 
 An additional property is included, `showStatusBar` to force hiding status bar if application status bar is visible. **_Noted:_** if this property is set to `YES`, navigation bar will be hidden too.
 
 Beside default dataSource methods from `UIPhotoGalleryDataSource`, there are 2 additional methods to setup top & bottom view for gallery view controller:
-	
-	- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
-	- (UIView*)customBottomViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
+
+```objective-c
+- (UIView*)customTopViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
+- (UIView*)customBottomViewForGalleryViewController:(UIPhotoGalleryViewController*)galleryViewController;
+```
 
 If these methods are not implemented, `UIPhotoGalleryViewController` provide 2 default views for top & bottom for essential actions (dismiss view controller, scroll next & previous page).
 
@@ -164,15 +197,19 @@ By default, for gallery delegate handling, when user single tap in gallery, top 
 
 For minimum requirement, add 4 following files to your project:
 
-	UIPhotoGalleryView.h
-	UIPhotoGalleryView.m
-	UIPhotoItemView.h
-	UIPhotoItemView.m
+```objective-c
+UIPhotoGalleryView.h
+UIPhotoGalleryView.m
+UIPhotoItemView.h
+UIPhotoItemView.m
+```
 
 for `UIPhotoGalleryView` UI components & methods. The 2 additional files:
 
-	UIPhotoGalleryViewController.h
-	UIPhotoGalleryViewController.m
+```objective-c
+UIPhotoGalleryViewController.h
+UIPhotoGalleryViewController.m
+```
 
 should be included only if you wants to use `UIPhotoGalleryViewController`.
 
