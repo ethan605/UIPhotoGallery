@@ -53,7 +53,7 @@ To declare a caption component in specific index:
 - (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewCaptionAtIndex:(NSInteger)index;
 ```
 
-Similar to view component, **only one** caption contruction method is used at a moment to contruct caption for gallery item, depends on `UIPhotoGalleryView`'s `captionStyle`, including 3 supported styles so far:
+Similar to view component, **only one** caption contruction method is used at a moment to contruct caption for gallery item, depends on `UIPhotoGalleryView`'s `captionStyle`, including 3 supported styles:
 
 ```objective-c
 UIPhotoCaptionStylePlainText
@@ -63,7 +63,7 @@ UIPhotoCaptionStyleCustomView
 
 ### Delegate
 
-So far, UIPhotoGallery provides 2 delegate methods:
+So far, UIPhotoGallery provides 3 delegate methods:
 
 ```objective-c
 - (void)photoGallery:(UIPhotoGalleryView*)photoGallery didTapAtIndex:(NSInteger)index;
@@ -222,15 +222,15 @@ The `UIPhotoGalleryView` could be initialized using default method `initWithFram
 
 1. Go to your XIB file
 2. Click on Files owner transparent box on the left
-3. Open up your inspections tab(Third button on right in the View Section - in between Editor and Organizer)
-4. Go to your identity Inspector(3rd from the left) underneath the editor organizer view tab.
+3. Open up your inspections tab (Third button on right in the View Section - in between Editor and Organizer)
+4. Go to your identity Inspector (3rd from the left) underneath the editor organizer view tab.
 5. Fix the custom class - Class option to whatever class you want it to respond to.
 
 The `dataSource` and `delegate` can also be linked in Interface Builder.
 
 ### Depenencies
 
-The project uses [**SDWebImage**](https://github.com/rs/SDWebImage) as default image loading and displaying. Please follow [its installation instructions](https://github.com/rs/SDWebImage#installation) to setup the project or customize your image loading methods inside `UIRemotePhotoItem` class implementation (`UIPhotoItemView.m`)
+The project uses [**SDWebImage**](https://github.com/rs/SDWebImage) as default image loading and displaying. Please follow its [installation instructions](https://github.com/rs/SDWebImage#installation) to setup the project or customize your image loading methods inside `UIRemotePhotoItem` class implementation (`UIPhotoItemView.m`)
 
 ### Requirements & Supports
 
