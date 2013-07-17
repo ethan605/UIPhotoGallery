@@ -217,16 +217,20 @@
         [self addSubview:activityIndicator];
         
         UIRemotePhotoItem *selfDelegate = self;
-        
-        [selfDelegate setImageWithURL:remoteUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
-            if (!error && image) {
-                [activityIndicator removeFromSuperview];
-                
-                CGFloat widthScale = image.size.width / _photoItemView.frame.size.width;
-                CGFloat heightScale = image.size.height / _photoItemView.frame.size.height;
-                _photoItemView.maximumZoomScale = MIN(widthScale, heightScale) * kMaxZoomingScale;
-            }
-        }];
+
+        double delayInSeconds = 0.0;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            [selfDelegate setImageWithURL:remoteUrl completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType) {
+                if (!error && image) {
+                    [activityIndicator removeFromSuperview];
+
+                    CGFloat widthScale = image.size.width / _photoItemView.frame.size.width;
+                    CGFloat heightScale = image.size.height / _photoItemView.frame.size.height;
+                    _photoItemView.maximumZoomScale = MIN(widthScale, heightScale) * kMaxZoomingScale;
+                }
+            }];
+        });
     }
     
     return self;
