@@ -174,6 +174,9 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    if ([self.delegate respondsToSelector:@selector(photoGallery:didMoveToIndex:)]) {
+        [self.delegate photoGallery:self didMoveToIndex:currentPage];
+    }
     mainScrollIndicatorView.tag = 0;
     
     double delayInSeconds = 2.0;

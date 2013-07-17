@@ -195,7 +195,7 @@
     
     if (_dataSource && [_dataSource respondsToSelector:@selector(customBottomViewForGalleryViewController:)]) {
         bottomView = [_dataSource customBottomViewForGalleryViewController:self];
-        bottomView.frame = CGRectMake(0, 0, bottomView.frame.size.width, bottomView.frame.size.height);
+        bottomView.frame = CGRectMake(0, self.view.frame.size.height-bottomView.frame.size.height, bottomView.frame.size.width, bottomView.frame.size.height);
         [self.view addSubview:bottomView];
         return;
     }
