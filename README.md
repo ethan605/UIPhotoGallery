@@ -69,6 +69,7 @@ So far, UIPhotoGallery provides 3 delegate methods:
 - (void)photoGallery:(UIPhotoGalleryView*)photoGallery didTapAtIndex:(NSInteger)index;
 - (void)photoGallery:(UIPhotoGalleryView*)photoGallery didDoubleTapAtIndex:(NSInteger)index;
 - (UIPhotoGalleryDoubleTapHandler)photoGallery:(UIPhotoGalleryView*)photoGallery doubleTapHandlerAtIndex:(NSInteger)index;
+- (void)photoGallery:(UIPhotoGalleryView *)photoGallery didMoveToIndex:(NSInteger)index;
 ```
 
 Use `photoGallery:didTapAtIndex:` method to handle single tap at gallery item.
@@ -82,6 +83,8 @@ UIPhotoGalleryDoubleTapHandlerCustom
 ```
 
 If this method return `UIPhotoGalleryDoubleTapHandlerZoom`, current photo item  will be zoomed at tapping position. If `UIPhotoGalleryDoubleTapHandlerCustom` returned, action will be dispatched to `photoGallery:didDoubleTapAtIndex:` if  implemented. Otherwise, if `UIPhotoGalleryDoubleTapHandlerNone` returned, nothing happens.
+
+Use `photoGallery:didMoveToIndex:` method to get notified if the currentIndex changes. (thanks to [**jstubenrauch**](https://github.com/jstubenrauch))
 
 ## UIPhotoGalleryView
 
