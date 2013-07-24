@@ -42,7 +42,7 @@
 }
 
 - (void)setTag:(NSInteger)tag {
-    _tag = tag;
+    [super setTag:tag];
     photoItemView.tag = tag;
 }
 
