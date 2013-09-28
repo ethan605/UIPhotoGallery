@@ -11,10 +11,11 @@
 #import <SDWebImage/UIImageView+WebCache.h>
 
 #define kDefaultSubviewGap              30
-#define kMaxSpareViews                  2
+#define kMaxSpareViews                  1
 
 @interface UIPhotoGalleryView ()
 
+- (void)initDefaults;
 - (void)initMainScrollView;
 - (void)setupMainScrollView;
 - (BOOL)reusableViewsContainViewAtIndex:(NSInteger)index;
@@ -34,6 +35,7 @@
         UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin |
         UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
+        [self initDefaults];
         [self initMainScrollView];
     }
     
@@ -42,10 +44,12 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    [self initDefaults];
     [self initMainScrollView];
 }
 
 - (void)layoutSubviews {
+    [super layoutSubviews];
     [self setupMainScrollView];
 }
 
@@ -72,7 +76,8 @@
 - (void)setShowsScrollIndicator:(BOOL)showsScrollIndicator {
     _showsScrollIndicator = showsScrollIndicator;
     
-    [self setupScrollIndicator];
+    if (_showsScrollIndicator)
+        [self setupScrollIndicator];
 }
 
 - (void)setVerticalGallery:(BOOL)verticalGallery {
@@ -126,7 +131,7 @@
         contentOffset.x = currentPage * mainScrollView.frame.size.width;
     
     [mainScrollView setContentOffset:contentOffset animated:animation];
-
+    
     return YES;
 }
 
@@ -138,7 +143,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat newPage;
     CGFloat scrollIndicatorMoveSpace = 0;
-
+    
     CGRect frame = mainScrollIndicatorView.frame;
     
     if (_verticalGallery) {
@@ -191,7 +196,7 @@
 }
 
 #pragma private methods
-- (void)initMainScrollView {
+- (void)initDefaults {
     _galleryMode = UIPhotoGalleryModeImageLocal;
     _captionStyle = UIPhotoCaptionStylePlainText;
     _subviewGap = kDefaultSubviewGap;
@@ -199,13 +204,17 @@
     _showsScrollIndicator = YES;
     _verticalGallery = NO;
     _initialIndex = 0;
-    
+}
+
+- (void)initMainScrollView {
     CGRect frame = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     
     if (_verticalGallery)
         frame.size.height += _subviewGap;
     else
         frame.size.width += _subviewGap;
+    
+    [mainScrollView removeFromSuperview];
     
     mainScrollView = [[UIScrollView alloc] initWithFrame:frame];
     mainScrollView.autoresizingMask = self.autoresizingMask;
@@ -246,6 +255,8 @@
         default:
             break;
     }
+    
+    [self initMainScrollView];
     
     dataSourceNumOfViews = [_dataSource numberOfViewsInPhotoGallery:self];
     
@@ -290,7 +301,7 @@
         }
     
     [reusableViews minusSet:toRemovedViews];
-
+    
     for (NSInteger index = -kMaxSpareViews; index <= kMaxSpareViews; index++) {
         NSInteger assertIndex = currentPage + index;
         if (assertIndex < 0 || assertIndex >= dataSourceNumOfViews ||
@@ -325,7 +336,7 @@
         case UIPhotoGalleryModeImageRemote:
             galleryItem = [_dataSource photoGallery:self remoteImageURLAtIndex:index];
             break;
-
+            
         default:
             galleryItem = [_dataSource photoGallery:self customViewAtIndex:index];
             break;
@@ -347,7 +358,7 @@
         case UIPhotoCaptionStylePlainText:
             if ([_dataSource respondsToSelector:@selector(photoGallery:plainTextCaptionAtIndex:)])
                 captionItem = [_dataSource photoGallery:self plainTextCaptionAtIndex:index];
-
+            
             break;
             
         case UIPhotoCaptionStyleAttributedText:
