@@ -49,7 +49,6 @@
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
     [self setupMainScrollView];
 }
 
@@ -162,6 +161,9 @@
         currentPage = (NSInteger)newPage;
         [self populateSubviews];
     }
+    
+    if ([_delegate respondsToSelector:@selector(scrollViewDidScroll:)])
+        [_delegate scrollViewDidScroll:scrollView];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -169,6 +171,9 @@
     [UIView animateWithDuration:0.3 animations:^{
         mainScrollIndicatorView.alpha = 1;
     }];
+    
+    if ([_delegate respondsToSelector:@selector(scrollViewWillBeginDragging:)])
+        [_delegate scrollViewWillBeginDragging:scrollView];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
@@ -176,11 +181,14 @@
         return;
     
     [self scrollViewDidEndDecelerating:scrollView];
+    
+    if ([_delegate respondsToSelector:@selector(scrollViewDidEndDragging:willDecelerate:)])
+        [_delegate scrollViewDidEndDragging:scrollView willDecelerate:decelerate];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if ([self.delegate respondsToSelector:@selector(photoGallery:didMoveToIndex:)])
-        [self.delegate photoGallery:self didMoveToIndex:currentPage];
+    if ([_delegate respondsToSelector:@selector(photoGallery:didMoveToIndex:)])
+        [_delegate photoGallery:self didMoveToIndex:currentPage];
     
     mainScrollIndicatorView.tag = 0;
     
