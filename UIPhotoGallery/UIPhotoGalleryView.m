@@ -147,11 +147,11 @@
     
     if (_verticalGallery) {
         newPage = scrollView.contentOffset.y / scrollView.frame.size.height;
-        scrollIndicatorMoveSpace = (self.frame.size.height - mainScrollIndicatorView.frame.size.height)/(dataSourceNumOfViews-1);
+        scrollIndicatorMoveSpace = (dataSourceNumOfViews == 1) ? 0 : (self.frame.size.height - mainScrollIndicatorView.frame.size.height)/(dataSourceNumOfViews-1);
         frame.origin.y = newPage*scrollIndicatorMoveSpace;
     } else {
         newPage = scrollView.contentOffset.x / scrollView.frame.size.width;
-        scrollIndicatorMoveSpace = (self.frame.size.width - mainScrollIndicatorView.frame.size.width)/(dataSourceNumOfViews-1);
+        scrollIndicatorMoveSpace = (dataSourceNumOfViews == 1) ? 0 : (self.frame.size.width - mainScrollIndicatorView.frame.size.width)/(dataSourceNumOfViews-1);
         frame.origin.x = newPage*scrollIndicatorMoveSpace;
     }
     
