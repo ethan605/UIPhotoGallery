@@ -70,6 +70,10 @@
     [photoCaptionView setCaptionHide:hide withAnimation:animated];
 }
 
+- (void)resetZoom {
+    [photoItemView resetZoom];
+}
+
 @end
 
 @interface UIPhotoItemView ()
@@ -181,7 +185,7 @@
 - (void)zoomFromLocation:(CGPoint)zoomLocation {
     CGSize scrollViewSize = self.frame.size;
     
-    CGFloat zoomScale = (self.zoomScale == self.maximumZoomScale) ?
+    CGFloat zoomScale = (fabs(self.zoomScale - self.maximumZoomScale) <= 0.001f) ?
     self.minimumZoomScale : self.maximumZoomScale;
     
     CGFloat width = scrollViewSize.width / zoomScale;
@@ -190,6 +194,19 @@
     CGFloat y = zoomLocation.y - (height / 2);
     
     [self zoomToRect:CGRectMake(x, y, width, height) animated:YES];
+}
+
+- (void)resetZoom {
+    if (fabs(self.zoomScale - self.minimumZoomScale) > 0.001f) {
+        CGSize scrollViewSize = self.frame.size;
+        
+        CGFloat zoomScale = self.minimumZoomScale;
+        
+        CGFloat width = scrollViewSize.width / zoomScale;
+        CGFloat height = scrollViewSize.height / zoomScale;
+        
+        [self zoomToRect:CGRectMake(0, 0, width, height) animated:NO];
+    }
 }
 
 #pragma UIScrollViewDelegate methods
