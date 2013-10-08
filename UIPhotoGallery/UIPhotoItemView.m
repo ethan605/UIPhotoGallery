@@ -157,6 +157,12 @@
     return self;
 }
 
+- (void)dealloc {
+    if ([viewForZooming respondsToSelector:@selector(setPhotoItemView:)]) {
+        [viewForZooming performSelector:@selector(setPhotoItemView:) withObject:nil];
+    }
+}
+
 #pragma private methods
 - (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGesture {
     UIPhotoGalleryView *photoGallery = (UIPhotoGalleryView*)_galleryDelegate;
