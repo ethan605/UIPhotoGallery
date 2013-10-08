@@ -147,6 +147,12 @@
     return self;
 }
 
+- (void)dealloc {
+    if ([mainImageView respondsToSelector:@selector(setPhotoItemView:)]) {
+        [mainImageView performSelector:@selector(setPhotoItemView:) withObject:nil];
+    }
+}
+
 #pragma private methods
 - (void)tapGestureRecognizer:(UITapGestureRecognizer *)tapGesture {
     UIPhotoGalleryView *photoGallery = (UIPhotoGalleryView*)_galleryDelegate;
