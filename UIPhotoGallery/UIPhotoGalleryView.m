@@ -50,6 +50,12 @@
 }
 
 #pragma get-set methods
+- (void)setRemotePhotoItemClass:(Class)remotePhotoItemClass {
+    NSParameterAssert([remotePhotoItemClass conformsToProtocol:@protocol(UIRemotePhotoItem)]);
+    NSParameterAssert([remotePhotoItemClass isSubclassOfClass:[UIView class]]);
+    _remotePhotoItemClass = remotePhotoItemClass;
+}
+
 - (void)setGalleryMode:(UIPhotoGalleryMode)galleryMode {
     _galleryMode = galleryMode;
     [self layoutSubviews];
@@ -334,7 +340,7 @@
     if (!galleryItem)
         return nil;
     
-    subView = [[UIPhotoContainerView alloc] initWithFrame:frame andGalleryMode:_galleryMode withItem:galleryItem];
+    subView = [[UIPhotoContainerView alloc] initWithFrame:frame andGalleryMode:_galleryMode withItem:galleryItem remotePhotoItemClass:self.remotePhotoItemClass];
     subView.tag = index;
     subView.galleryDelegate = self;
     

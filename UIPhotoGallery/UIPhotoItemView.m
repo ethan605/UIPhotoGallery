@@ -18,6 +18,10 @@
 @implementation UIPhotoContainerView
 
 - (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem {
+    return [self initWithFrame:frame andGalleryMode:galleryMode withItem:galleryItem remotePhotoItemClass:nil];
+}
+
+- (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem remotePhotoItemClass:(__unsafe_unretained Class)remotePhotoItemClass {
     CGRect displayFrame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     
     if (self = [super initWithFrame:frame]) {
@@ -27,7 +31,7 @@
                 break;
                 
             case UIPhotoGalleryModeImageRemote:
-                photoItemView = [[UIPhotoItemView alloc] initWithFrame:displayFrame andRemoteURL:galleryItem];
+                photoItemView = [[UIPhotoItemView alloc] initWithFrame:displayFrame andRemoteURL:galleryItem remotePhotoItemClass:remotePhotoItemClass];
                 break;
                 
             default:
@@ -117,7 +121,7 @@
         imageView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [imageView setImage:localImage];
         
-        mainImageView = imageView;
+        viewForZooming = imageView;
         [self addSubview:imageView];
         
         CGFloat widthScale = localImage.size.width / self.frame.size.width;
@@ -129,10 +133,16 @@
 }
 
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl {
+    return [self initWithFrame:frame andRemoteURL:remoteUrl remotePhotoItemClass:nil];
+}
+
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl remotePhotoItemClass:(__unsafe_unretained Class)remotePhotoItemClass {
     if (self = [self initWithFrame:frame]) {
-        UIRemotePhotoItem *remotePhoto = [[UIRemotePhotoItem alloc] initWithFrame:frame andRemoteURL:remoteUrl];
+        if (remotePhotoItemClass == nil)
+            remotePhotoItemClass = [UIRemotePhotoItem class];
+        UIView<UIRemotePhotoItem> *remotePhoto = [[remotePhotoItemClass alloc] initWithFrame:frame andRemoteURL:remoteUrl];
         remotePhoto.photoItemView = self;
-        mainImageView = remotePhoto;
+        viewForZooming = remotePhoto;
         [self addSubview:remotePhoto];
     }
     
@@ -194,12 +204,14 @@
 
 #pragma UIScrollViewDelegate methods
 - (UIView*)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return mainImageView;
+    return viewForZooming;
 }
 
 @end
 
 @implementation UIRemotePhotoItem
+
+@synthesize photoItemView = _photoItemView;
 
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl {
     if (self = [super initWithFrame:frame]) {
