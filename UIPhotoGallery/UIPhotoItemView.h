@@ -21,6 +21,7 @@
 - (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem;
 - (void)setCaptionWithStyle:(UIPhotoCaptionStyle)captionStyle andItem:(id)captionItem;
 - (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated;
+- (void)resetZoom;
 
 @end
 
@@ -35,6 +36,8 @@
 - (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage*)localImage;
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL*)remoteUrl;
 - (id)initWithFrame:(CGRect)frame andCustomView:(UIView*)customView;
+
+- (void)resetZoom;
 
 @end
 

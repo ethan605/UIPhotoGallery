@@ -160,6 +160,12 @@
     if (((NSInteger)newPage) != currentPage) {
         currentPage = (NSInteger)newPage;
         [self populateSubviews];
+        
+        for (UIPhotoContainerView *subView in reusableViews) {
+            if (subView.tag != newPage) {
+                [subView resetZoom];
+            }
+        }
     }
     
     if ([_delegate respondsToSelector:@selector(scrollViewDidScroll:)])
@@ -326,6 +332,7 @@
         UIPhotoContainerView *subView = [self viewToBeAddedWithFrame:frame atIndex:currentPage+index];
         
         if (subView) {
+            [subView resetZoom];
             [mainScrollView addSubview:subView];
             [reusableViews addObject:subView];
         }
