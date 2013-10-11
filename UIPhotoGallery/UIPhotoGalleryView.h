@@ -87,6 +87,7 @@ typedef enum UIPhotoGalleryDoubleTapHandlerEnum {
 @property (nonatomic, assign) BOOL verticalGallery;
 @property (nonatomic, assign) CGFloat subviewGap;
 @property (nonatomic, assign) NSInteger initialIndex;
+@property (nonatomic) Class remotePhotoItemClass;
 @property (nonatomic, readonly) NSInteger currentIndex;
 
 - (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation;

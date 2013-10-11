@@ -19,6 +19,7 @@
 @property (nonatomic, assign) id<UIPhotoItemDelegate> galleryDelegate;
 
 - (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem;
+- (id)initWithFrame:(CGRect)frame andGalleryMode:(UIPhotoGalleryMode)galleryMode withItem:(id)galleryItem remotePhotoItemClass:(__unsafe_unretained Class)remotePhotoItemClass;
 - (void)setCaptionWithStyle:(UIPhotoCaptionStyle)captionStyle andItem:(id)captionItem;
 - (void)setCaptionHide:(BOOL)hide withAnimation:(BOOL)animated;
 - (void)resetZoom;
@@ -27,7 +28,7 @@
 
 @interface UIPhotoItemView : UIScrollView <UIScrollViewDelegate> {
 @private
-    UIImageView *mainImageView;
+    UIView *viewForZooming;
     UIPhotoCaptionView *captionView;
 }
 
@@ -35,17 +36,22 @@
 
 - (id)initWithFrame:(CGRect)frame andLocalImage:(UIImage*)localImage;
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL*)remoteUrl;
+- (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL*)remoteUrl remotePhotoItemClass:(Class)remotePhotoItemClass;
 - (id)initWithFrame:(CGRect)frame andCustomView:(UIView*)customView;
 
 - (void)resetZoom;
 
 @end
 
-@interface UIRemotePhotoItem : UIImageView
+@protocol UIRemotePhotoItem <NSObject>
 
 @property (nonatomic, strong) UIPhotoItemView *photoItemView;
 
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl;
+
+@end
+
+@interface UIRemotePhotoItem : UIImageView <UIRemotePhotoItem>
 
 @end
 
