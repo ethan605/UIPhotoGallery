@@ -43,7 +43,7 @@
 
 @interface UIRemotePhotoItem : UIImageView
 
-@property (nonatomic, strong) UIPhotoItemView *photoItemView;
+@property (nonatomic, assign) UIPhotoItemView *photoItemView;
 
 - (id)initWithFrame:(CGRect)frame andRemoteURL:(NSURL *)remoteUrl;
 
