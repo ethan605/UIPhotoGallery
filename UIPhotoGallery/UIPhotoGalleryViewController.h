@@ -9,9 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "UIPhotoGalleryView.h"
 
-@interface UIPhotoGalleryViewController : UIViewController<UIPhotoGalleryDataSource, UIPhotoGalleryDelegate> {
-    UIPhotoGalleryView *vPhotoGallery;
-}
+@interface UIPhotoGalleryViewController : UIViewController<UIPhotoGalleryDataSource, UIPhotoGalleryDelegate>
+
+@property(nonatomic, strong, readonly) UIPhotoGalleryView *vPhotoGallery;
 
 @property (nonatomic, assign) id<UIPhotoGalleryDataSource> dataSource;
 

@@ -16,6 +16,8 @@
     UIView *bottomView;
 }
 
+@property(nonatomic, strong) UIPhotoGalleryView *vPhotoGallery;
+
 - (void)setupTopBar;
 - (void)setupBottomBar;
 
@@ -33,11 +35,11 @@
         self.view.backgroundColor = [UIColor blackColor];
         self.view.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        vPhotoGallery = [[UIPhotoGalleryView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        vPhotoGallery.dataSource = self;
-        vPhotoGallery.delegate = self;
+        self.vPhotoGallery = [[UIPhotoGalleryView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        self.vPhotoGallery.dataSource = self;
+        self.vPhotoGallery.delegate = self;
         
-        [self.view addSubview:vPhotoGallery];
+        [self.view addSubview:self.vPhotoGallery];
         
         statusBarHidden = [UIApplication sharedApplication].statusBarHidden;
         controlViewHidden = NO;
@@ -80,9 +82,9 @@
     _dataSource = dataSource;
     
     if (!dataSource)
-        vPhotoGallery.dataSource = self;
+        self.vPhotoGallery.dataSource = self;
     else
-        vPhotoGallery.dataSource = _dataSource;
+        self.vPhotoGallery.dataSource = _dataSource;
     
     [self setupTopBar];
     [self setupBottomBar];
@@ -90,37 +92,37 @@
 
 - (void)setGalleryMode:(UIPhotoGalleryMode)galleryMode {
     _galleryMode = galleryMode;
-    vPhotoGallery.galleryMode = _galleryMode;
+    self.vPhotoGallery.galleryMode = _galleryMode;
 }
 
 - (void)setCaptionStyle:(UIPhotoCaptionStyle)captionStyle {
     _captionStyle = captionStyle;
-    vPhotoGallery.captionStyle = _captionStyle;
+    self.vPhotoGallery.captionStyle = _captionStyle;
 }
 
 - (void)setCircleScroll:(BOOL)circleScroll {
     _circleScroll = circleScroll;
-    vPhotoGallery.circleScroll = _circleScroll;
+    self.vPhotoGallery.circleScroll = _circleScroll;
 }
 
 - (void)setPeakSubView:(BOOL)peakSubView {
     _peakSubView = peakSubView;
-    vPhotoGallery.peakSubView = _peakSubView;
+    self.vPhotoGallery.peakSubView = _peakSubView;
 }
 
 - (void)setVerticalGallery:(BOOL)verticalGallery {
     _verticalGallery = verticalGallery;
-    vPhotoGallery.verticalGallery = _verticalGallery;
+    self.vPhotoGallery.verticalGallery = _verticalGallery;
 }
 
 - (void)setSubviewGap:(CGFloat)subviewGap {
     _subviewGap = subviewGap;
-    vPhotoGallery.subviewGap = _subviewGap;
+    self.vPhotoGallery.subviewGap = _subviewGap;
 }
 
 - (void)setInitialIndex:(NSInteger)initialIndex {
     _initialIndex = initialIndex;
-    vPhotoGallery.initialIndex = _initialIndex;
+    self.vPhotoGallery.initialIndex = _initialIndex;
 }
 
 #pragma UIPhotoGalleryDataSource methods
@@ -232,11 +234,11 @@
 }
 
 - (void)btnPrevPressed {
-    [vPhotoGallery scrollToBesidePage:-1 animated:YES];
+    [self.vPhotoGallery scrollToBesidePage:-1 animated:YES];
 }
 
 - (void)btnNextPressed {
-    [vPhotoGallery scrollToBesidePage:1 animated:YES];
+    [self.vPhotoGallery scrollToBesidePage:1 animated:YES];
 }
 
 @end
