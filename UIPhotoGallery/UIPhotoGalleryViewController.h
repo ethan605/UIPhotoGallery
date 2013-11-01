@@ -22,6 +22,7 @@
 @property (nonatomic, assign) BOOL peakSubView;
 @property (nonatomic, assign) BOOL verticalGallery;
 @property (nonatomic, assign) BOOL scrollToInitIdxAnimated;
+@property (nonatomic, assign) BOOL dismissAnimated;
 @property (nonatomic, assign) CGFloat subviewGap;
 @property (nonatomic, assign) NSInteger initialIndex;
 

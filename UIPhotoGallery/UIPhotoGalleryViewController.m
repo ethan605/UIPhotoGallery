@@ -45,6 +45,8 @@
         controlViewHidden = NO;
         [self setupTopBar];
         [self setupBottomBar];
+        
+        self.dismissAnimated = YES;
     }
     
     return self;
@@ -233,9 +235,9 @@
 
 - (void)btnDonePressed {
     if (self.navigationController)
-        [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:self.dismissAnimated];
     else
-        [self dismissViewControllerAnimated:YES completion:NULL];
+        [self dismissViewControllerAnimated:self.dismissAnimated completion:NULL];
 }
 
 - (void)btnPrevPressed {
