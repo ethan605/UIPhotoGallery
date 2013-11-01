@@ -64,6 +64,14 @@
         if (self.navigationController)
             [self.navigationController setNavigationBarHidden:YES animated:YES];
     }
+
+    self.vPhotoGallery.hidden = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self.vPhotoGallery setInitialIndex:self.initialIndex animated:self.scrollToInitIdxAnimated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -75,6 +83,8 @@
         if (self.navigationController)
             [self.navigationController setNavigationBarHidden:NO animated:YES];
     }
+    
+    self.vPhotoGallery.hidden = YES;
 }
 
 #pragma get-set methods
@@ -118,11 +128,6 @@
 - (void)setSubviewGap:(CGFloat)subviewGap {
     _subviewGap = subviewGap;
     self.vPhotoGallery.subviewGap = _subviewGap;
-}
-
-- (void)setInitialIndex:(NSInteger)initialIndex {
-    _initialIndex = initialIndex;
-    self.vPhotoGallery.initialIndex = _initialIndex;
 }
 
 #pragma UIPhotoGalleryDataSource methods
