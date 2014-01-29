@@ -92,5 +92,6 @@ typedef enum UIPhotoGalleryDoubleTapHandlerEnum {
 - (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation;
 - (BOOL)scrollToPage:(NSInteger)page animated:(BOOL)animation;
 - (BOOL)scrollToBesidePage:(NSInteger)delta animated:(BOOL)animation;
+- (UIView *)getCurrentView;
 
 @end

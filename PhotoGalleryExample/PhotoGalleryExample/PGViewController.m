@@ -23,6 +23,7 @@
     
     vPhotoGallery.initialIndex = 4;
     vPhotoGallery.showsScrollIndicator = NO;
+    vPhotoGallery.galleryMode = UIPhotoGalleryModeCustomView;
     
     sampleURLs = @[
                    @"http://l.yimg.com/g/images/bg_error_hold_your_clicks.jpg",
@@ -120,6 +121,7 @@
 
 #pragma UIPhotoGalleryDelegate methods
 - (void)photoGallery:(UIPhotoGalleryView *)photoGallery didTapAtIndex:(NSInteger)index {
+    DLog(@"%@", [photoGallery getCurrentView]);
 }
 
 - (UIPhotoGalleryDoubleTapHandler)photoGallery:(UIPhotoGalleryView *)photoGallery doubleTapHandlerAtIndex:(NSInteger)index {

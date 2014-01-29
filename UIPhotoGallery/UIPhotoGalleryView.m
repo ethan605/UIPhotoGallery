@@ -138,6 +138,14 @@
     return [self scrollToPage:currentPage+delta animated:animation];
 }
 
+- (UIView *)getCurrentView {
+    for (UIView *subView in mainScrollView.subviews)
+        if ([subView isKindOfClass:[UIPhotoContainerView class]] && subView.tag == currentPage)
+            return subView;
+    
+    return nil;
+}
+
 #pragma UIScrollViewDelegate methods
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat newPage;
