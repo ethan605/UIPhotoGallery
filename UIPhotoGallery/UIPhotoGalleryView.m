@@ -169,7 +169,7 @@
         currentPage = (NSInteger)newPage;
         [self populateSubviews];
         
-        for (UIPhotoContainerView *subView in reusableViews) {
+        for (UIPhotoContainerView *subView in [reusableViews copy]) {
             if (subView.tag != newPage) {
                 [subView resetZoom];
             }
