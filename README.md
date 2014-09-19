@@ -161,6 +161,8 @@ The method `scrollToBeSidePage` use a NSInteger `delta` param to scroll to the n
 
 All validation of page index are done for you and returned `YES` if the index is valid and scrolling is made, otherwise `NO`.
 
+**_Note:_** To reload the gallery view, simply call `[galleryView layoutSubviews]`
+
 ## UIPhotoGalleryViewController
 
 As an extension, UIPhotoGalleryViewController is created to help simplify your process of creating a view controller for gallery browsing. This view controller already included a `UIPhotoGalleryView` item named `vPhotoGallery`, which is initialized with default configurations.
