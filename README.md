@@ -247,7 +247,7 @@ The project's already supported multiple screen sizes and orientations (auto-res
 
 All source code is licensed under the [MIT License](http://opensource.org/licenses/MIT)
 
-	Copyright (c) 2013 Ethan Nguyen <ethan@vinova.sg>
+	Copyright (c) 2013 Ethan Nguyen <thanhnx.605@gmail.com>
 	 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
