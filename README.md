@@ -53,7 +53,7 @@ To declare a caption component in specific index:
 - (UIView*)photoGallery:(UIPhotoGalleryView*)photoGallery customViewCaptionAtIndex:(NSInteger)index;
 ```
 
-Similar to view component, **only one** caption contruction method is used at a moment to contruct caption for gallery item, depends on `UIPhotoGalleryView`'s `captionStyle`, including 3 supported styles:
+Similar to view component, **only one** caption construction method is used at a moment to contruct caption for gallery item, depends on `UIPhotoGalleryView`'s `captionStyle`, including 3 supported styles:
 
 ```objective-c
 UIPhotoCaptionStylePlainText
