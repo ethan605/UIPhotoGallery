@@ -362,6 +362,13 @@
     CGSize captionSize;
     
     if (plainText)
+//        // for iOS (7.0 and later)
+//        captionSize = [plainText boundingRectWithSize:CGSizeMake(frame.size.width, MAXFLOAT)
+//                                              options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading
+//                                           attributes:[NSDictionary dictionaryWithObjectsAndKeys:
+//                                                       captionFont, NSFontAttributeName,
+//                                                       nil]
+//                                              context:nil].size;
         captionSize = [plainText sizeWithFont:captionFont
                             constrainedToSize:CGSizeMake(frame.size.width, MAXFLOAT)];
     else

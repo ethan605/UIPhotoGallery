@@ -105,9 +105,8 @@
 
 - (void)setInitialIndex:(NSInteger)initialIndex animated:(BOOL)animation {
     _initialIndex = initialIndex;
-    currentPage = _initialIndex;
     
-    [self scrollToPage:currentPage animated:animation];
+    [self scrollToPage:initialIndex animated:animation];
 }
 
 - (NSInteger)currentIndex {
@@ -250,7 +249,6 @@
     [self addSubview:mainScrollView];
     
     reusableViews = [NSMutableSet set];
-    currentPage = 0;
 }
 
 - (void)setupMainScrollView {
